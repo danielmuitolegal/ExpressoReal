@@ -1,7 +1,7 @@
 <?PHP
 SESSION_START();
 include('database.php');
-
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
