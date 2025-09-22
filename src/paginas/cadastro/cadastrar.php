@@ -66,7 +66,11 @@ if ($stmt->execute()) {
             header("Location: ../login/login.php");
             exit;
         }
-    } else {
+    }   
+    
+    else 
+    
+    {
         $_SESSION['erro'] = "Usuário não encontrado.";
         header("Location: ../login/login.php");
         exit;
