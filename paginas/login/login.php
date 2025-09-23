@@ -47,10 +47,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <form action="login.php" method="POST">
         <h1>Login</h1>
 
-        // se a variável "error" não for vazia
+        <!-- se a variável "error" não for vazia -->
         <?php if($error != ""): ?>
 
-            // rodar o conteúdo dessa div
+            <!-- rodar o conteúdo dessa div -->
             <div class="error"><?php echo $error; ?></div>
         <?php endif; ?>
         <input type="email" placeholder="Digite seu e-mail" id="email" name="email" required>
