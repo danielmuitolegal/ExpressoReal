@@ -77,9 +77,8 @@ if ($stmt->execute()) {
     }
 
 if (password_verify($senha, $hashed_password)) {
-    // A senha corresponde ao hash
+   
 } else {
-    // A senha não corresponde ao hash
 }
 $stmt->close();
 $conn->close();
