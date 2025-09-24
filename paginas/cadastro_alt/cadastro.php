@@ -4,19 +4,28 @@
 session_start();
 
 // variável pra caso a senha ou usuário estiver errado
-$error = "";
+$mensagem = "";
 
 // verificar se formulário foi enviado
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // joga as informação do formulário nas variáveis
-    $user = $_POST['user'];
-    $email = $_POST['email'];
     $senha = $_POST['password'];
     $senha_confirm = $_POST['password_confirm'];
 
+    // se a senha digitada no primeiro input NÃO for igual a do segundo
     if ($senha != $senha_confirm) {
-        $error = "As duas senhas não coincidem";
+        $mensagem = "<p>As duas senhas não coincidem</p>";
+    } else {        // se for
+
+        // guarda as informações do usuário
+        $user = $_POST['user'];
+        $email = $_POST['email'];
+
+        // deixa a senha do usuário criptografada
+        $hash = password_hash($senha, PASSWORD_DEFAULT);
+
+        $mensagem = "Sua conta foi criada $user, clique <a>aqui</a> para voltar para a página de login";
     }
 }
 
@@ -37,17 +46,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <form id="formCadastro" action="" method="POST">
         <h1>Cadastro</h1>
 
-        <!-- se a variável "error" não for vazia -->
+        <!-- se a variável "mensagem" não for vazia -->
         <?php if ($error != ""): ?>
 
             <!-- rodar o conteúdo dessa div -->
-            <div class="error"><?php echo $error; ?></div>
+            <div class="mensagem"><?php echo $mensagem; ?></div>
         <?php endif; ?>
-        <input type="text" placeholder="Digite seu usuário" id="user" name="user" required>
+        <input type="text" placeholder="Crie seu usuário" id="user" name="user" required>
         <input type="email" placeholder="Digite seu e-mail" id="email" name="email" required>
         <br>
-        <input type="password" placeholder="Digite sua senha" id="password" name="password" required>
-        <input type="password" placeholder="Digite sua senha" id="password_confirm" name="password_confirm" required>
+        <input type="password" placeholder="Crie sua senha" id="password" name="password" required>
+        <input type="password" placeholder="Repita sua senha" id="password_confirm" name="password_confirm" required>
         <br>
         <button type="submit"><strong>Criar conta</strong></button>
     </form>
