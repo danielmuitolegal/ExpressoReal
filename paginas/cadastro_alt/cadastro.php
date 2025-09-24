@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h1>Cadastro</h1>
 
         <!-- se a variável "mensagem" não for vazia -->
-        <?php if ($error != ""): ?>
+        <?php if ($mensagem != ""): ?>
 
             <!-- rodar o conteúdo dessa div -->
             <div class="mensagem"><?php echo $mensagem; ?></div>
