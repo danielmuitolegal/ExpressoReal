@@ -3,16 +3,16 @@
 $host = "localhost";
 
 // quem ta usando o SQL, configurado la no xampp
-$usuario = "root";
+$usuario = "if0_40023869";
 
 // senha do usuario do MySQL, também tem como configurar, mas a padrão é nenhuma
-$senha = "your_password";
+$senha = "esDB9jpVbhLLq8";
 
 // nome do nosso banco de dados
 $banco = "expresso_real";
 
 // porta usada
-$porta = "3308";
+$porta = "3306";
 
 // cria conexão com o banco usando o MySQLi
 $conn = new mysqli($host, $usuario, $senha, $banco, $porta);
