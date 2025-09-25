@@ -2,6 +2,9 @@
 // inicia sessão, precisa disso pra "guardar" quem tá fazendo login
 session_start();
 
+// incluir o arquivo do banco de dados
+include("../../bdd/database.php");
+
 // variável pra caso a senha ou usuário estiver errado
 $mensagem = "";
 
@@ -24,31 +27,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {        // se for
 
             // guarda as informações do usuário
-        $user = $_POST['user'];
-        $email = $_POST['email'];
+            $user = $_POST['user'];
+            $email = $_POST['email'];
 
-        // deixa a senha do usuário criptografada
-        $hash = password_hash($senha, PASSWORD_BCRYPT);
-        $senha = "";
+            // deixa a senha do usuário criptografada
+            $hash = password_hash($senha, PASSWORD_BCRYPT);
+            $senha = "";
 
-        // insere os dados no banco SQL (esses ? vão ser ligados depois)
-        $sql = "INSERT INTO usuario (NomeUsuario, EmailUsuario, SenhaHash) values (?, ?, ?)";
+            // insere os dados no banco SQL (esses ? vão ser ligados depois)
+            $sql = "INSERT INTO usuario (NomeUsuario, EmailUsuario, SenhaHash) values (?, ?, ?)";
 
-        // prepara o sql
-        $stmt = $conn->prepare($sql);
+            // prepara o sql
+            $stmt = $conn->prepare($sql);
 
-        // liga as variáveis do forms no SQL
-        // "s" significa que a variável é uma string
-        $stmt->bind_param("sss", $user, $email, $hash);
+            // liga as variáveis do forms no SQL
+            // "s" significa que a variável é uma string
+            $stmt->bind_param("sss", $user, $email, $hash);
 
-        // executa o comando la no banco
-        if ($stmt->execute()) {
-            $mensagem = "Sua conta foi criada $user, clique <a>aqui</a> para voltar para a página de login";
-        } else {
-            $mensagem = "Ocorreu um erro, tente novamente mais tarde";
+            // executa o comando la no banco
+            if ($stmt->execute()) {
+                $mensagem = "Sua conta foi criada $user, clique <a href='../login/login.php'>aqui</a> para voltar para a página de login";
+            } else {
+                $mensagem = "Ocorreu um erro, tente novamente mais tarde";
+            }
         }
-
-        
     }
 }
 
