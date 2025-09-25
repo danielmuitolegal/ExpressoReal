@@ -24,16 +24,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {        // se for
 
             // guarda as informações do usuário
-            $user = $_POST['user'];
-            $email = $_POST['email'];
+        $user = $_POST['user'];
+        $email = $_POST['email'];
 
-            // deixa a senha do usuário criptografada
-            $hash = password_hash($senha, PASSWORD_BCRYPT);
+        // deixa a senha do usuário criptografada
+        $hash = password_hash($senha, PASSWORD_BCRYPT);
+        $senha = "";
 
-            $mensagem = "Sua conta foi criada $user, clique <a href='../login/login.php'>aqui</a> para fazer login";
+        // insere os dados no banco SQL (esses ? vão ser ligados depois)
+        $sql = "INSERT INTO usuario (NomeUsuario, EmailUsuario, SenhaHash) values (?, ?, ?)";
 
-            
+        // prepara o sql
+        $stmt = $conn->prepare($sql);
+
+        // liga as variáveis do forms no SQL
+        // "s" significa que a variável é uma string
+        $stmt->bind_param("sss", $user, $email, $hash);
+
+        // executa o comando la no banco
+        if ($stmt->execute()) {
+            $mensagem = "Sua conta foi criada $user, clique <a>aqui</a> para voltar para a página de login";
+        } else {
+            $mensagem = "Ocorreu um erro, tente novamente mais tarde";
         }
+
+        
     }
 }
 
