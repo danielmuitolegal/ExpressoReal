@@ -28,9 +28,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $email = $_POST['email'];
 
             // deixa a senha do usuário criptografada
-            $hash = password_hash($senha, PASSWORD_DEFAULT);
+            $hash = password_hash($senha, PASSWORD_BCRYPT);
 
             $mensagem = "Sua conta foi criada $user, clique <a href='../login/login.php'>aqui</a> para fazer login";
+
+            
         }
     }
 }
