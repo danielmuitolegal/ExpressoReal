@@ -128,12 +128,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <input type="password" class="form-control form-control-lg" id="password_confirm" name="password_confirm" placeholder="Repita sua senha" required autocomplete="new-password">
                             </div>
                             <div class="g-recaptcha" data-sitekey="6LeN5dYrAAAAANP9T3IFdvM8WjtsltfDB1eLgW2h"></div>
-                            <br>
+                            
+                            <div class="mb-3">
+                                <a href="../cadastroAdmin/cadastroAdmin.php">Tenho um código de admin</a>
+                            </div>
+                            
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-primary btn-lg rounded-3">
                                     Criar conta
                                 </button>
                             </div>
+
                         </form>
 
                     </div>
