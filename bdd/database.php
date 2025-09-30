@@ -6,7 +6,7 @@ $host = "localhost";
 $usuario = "root";
 
 // senha do usuario do MySQL, também tem como configurar, mas a padrão é nenhuma
-$senha = "";
+$senha = "root";
 
 // nome do nosso banco de dados
 $banco = "expresso_real";
