@@ -3,6 +3,7 @@ const form = document.getElementById("formCadastro");
 
 // vai ouvir quando o botao lá de submit for clickado
 form.addEventListener("submit", function(event) {
+    // previne da tela recarregar
     event.preventDefault();
 
     // limpa o espaço da senha

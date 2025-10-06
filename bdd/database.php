@@ -12,7 +12,7 @@ $senha = "root";
 $banco = "expresso_real";
 
 // porta usada
-$porta = "3306";
+$porta = "3307";
 
 // cria conexão com o banco usando o MySQLi
 $conn = new mysqli($host, $usuario, $senha, $banco, $porta);
