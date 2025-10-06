@@ -10,28 +10,47 @@
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><img src="../../imagens/logo.png" alt="logo" class="d-inline-block" width="38" height="30" loading="lazy"></a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item mx-3">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item mx-3">
+                        <a class="nav-link active" aria-disabled="true" href="#">Rotas</a>
+                    </li>
+                    <li class="nav-item disabled">
+                        <a class="nav-link active" aria-disabled="true" href="#">Manutenção</a>
+                    </li>
+                </ul>
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
     <form action="salvar_sensor.php" method="POST">
-        <h1>Gerenciamento de Sensores</h1>
 
-        <!-- Mensagem de erro -->
-        <?php if (!empty($error)): ?>
-            <div class="error"><?php echo $error; ?></div>
-        <?php endif; ?>
 
-        <!-- Mensagem de sucesso -->
-        <?php if (!empty($success)): ?>
-            <div class="success"><?php echo $success; ?></div>
-        <?php endif; ?>
+        <div class="container">
+            <h1 class="text-center mt-3">Gerenciamento de Sensores</h1>
+        </div>
 
-        <label for="nome">Nome do Sensor:</label>
-        <input type="text" id="nome" name="nome" placeholder="Ex: Sensor de Temperatura" maxlength="50" required>
+        <div class="container ">
+            <label for="nome">Nome do Sensor:</label>
+            <input type="text" id="nome" name="nome" placeholder="Ex: Sensor de Temperatura" maxlength="50" required>
 
-        <label for="tipo">Tipo:</label>
-        <input type="text" id="tipo" name="tipo" placeholder="Ex: Temperatura, Umidade..." maxlength="30" required>
+            <label for="tipo">Tipo:</label>
+            <input type="text" id="tipo" name="tipo" placeholder="Ex: Temperatura, Umidade..." maxlength="30" required>
+        </div>
+
 
 
         <br>
-
         <button type="submit" class="btn btn-outline-primary"><strong>Salvar</strong></button>
         <button type="reset" class="btn btn-outline-primary">Cancelar</button>
     </form>
