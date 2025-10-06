@@ -1,3 +1,17 @@
+<?php
+    session_start();
+    
+    if (!isset($_SESSION['usuario_nome'])) {
+        // se não estiver logado, direciona pra login
+        header("Location: ../login/login.php");
+        exit();
+    }
+    
+    $nome = $_SESSION['usuario_nome'];
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,8 +24,34 @@
 </head>
 
 <body>
+    
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand"><img src="../../imagens/logo.png" alt=""></a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item mx-3">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item mx-3">
+          <a class="nav-link active" aria-disabled="true" href="#">Rotas</a>
+        </li>
+        <li class="nav-item disabled">
+          <a class="nav-link active" aria-disabled="true" href="#">Manutenção</a>
+        </li>
+      </ul>
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
     <div class="container">
-        <h1 class="text-center mt-3">Bem-vindo, </h1>
+        <h1 class="text-center mt-3">Bem-vindo, <?php echo $nome . "!"?></h1>
 
 
     </div>

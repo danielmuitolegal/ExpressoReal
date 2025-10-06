@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $senha = $_POST['password'];
 
             // seleciona os dados do banco mas ainda nao atribui a nenhuma variável
-            $sql = "SELECT SenhaHash, EmailUsuario FROM usuario WHERE EmailUsuario = ?";
+            $sql = "SELECT NomeUsuario, SenhaHash, EmailUsuario FROM usuario WHERE EmailUsuario = ?";
 
             $stmt = $conn->prepare($sql);
             $stmt->bind_param('s', $email);
@@ -39,12 +39,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->store_result();
 
             if ($stmt->num_rows > 0) {
-                $stmt->bind_result($hash, $email);
+                $stmt->bind_result($nome, $hash, $email);
                 $stmt->fetch();
 
                 // verifica a senha
                 if (password_verify($senha, $hash)) {
-                    $_SESSION['email'] = $email; // guarda nome ou email na sessão
+                    $_SESSION['usuario_nome'] = $nome; // guarda o nome na sessão
                     header("Location: ../dashboard/dashboard.php"); // redireciona para página interna
                     exit();
                 } else {
@@ -95,15 +95,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <label for="password" class="form-label">Senha</label>
                                 <input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="Digite sua senha" required autocomplete="new-password">
                             </div>
-                            <div class="g-recaptcha" data-sitekey="6LeN5dYrAAAAANP9T3IFdvM8WjtsltfDB1eLgW2h"></div>
+                            <div class="g-recaptcha m-2" data-sitekey="6LeN5dYrAAAAANP9T3IFdvM8WjtsltfDB1eLgW2h"></div>
+                            <div>
+                                <a href="../cadastro/cadastro.php">Não tenho uma conta</a>
+                            </div>
                             <br>
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-primary btn-lg rounded-3">
                                     Entrar
                                 </button>
                             </div>
-                        </form>
 
+                        </form>
                     </div>
                 </div>
             </div>
