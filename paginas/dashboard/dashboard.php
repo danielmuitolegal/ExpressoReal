@@ -28,7 +28,7 @@
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand"><img src="../../imagens/logo.png" alt=""></a>
+    <a class="navbar-brand" href="#"><img src="../../imagens/logo.png" alt="logo" class="d-inline-block" width="38" height="30" loading="lazy"></a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item mx-3">
