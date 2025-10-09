@@ -101,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                             <br>
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-primary btn-lg rounded-3">
+                                <button type="submit" class="btn btn-dark btn-lg rounded-3">
                                     Entrar
                                 </button>
                             </div>
