@@ -35,25 +35,26 @@
 
     <form action="salvar_sensor.php" method="POST">
 
+        <!-- Nome do Sensor -->
 
-        <div class="container">
-            <h1 class="text-center mt-3">Gerenciamento de Sensores</h1>
-        </div>
-
-        <div class="container ">
-            <label for="nome">Nome do Sensor:</label>
-            <input type="text" id="nome" name="nome" placeholder="Ex: Sensor de Temperatura" maxlength="50" required>
-
-            <label for="tipo">Tipo:</label>
-            <input type="text" id="tipo" name="tipo" placeholder="Ex: Temperatura, Umidade..." maxlength="30" required>
-        </div>
+        <section id="cadastro-sensores" class="py-5 bg-light">
+            <div class="container">
+                <h2 class="text-center mb-4 text-primary">Cadastro de Sensores Ferroviários</h2>
+                <form action="processa_sensor.php" method="POST" class="mx-auto" style="max-width: 600px;">
 
 
+                    <!-- Nome do Sensor -->
+                    <div class="mb-3">
+                        <label for="nome" class="form-label">Nome do Sensor</label>
+                        <input type="text" class="form-control" id="nome" name="nome" placeholder="Ex: Sensor de Temperatura" maxlength="50" required>
+                    </div>
 
-        <br>
-        <button type="submit" class="btn btn-outline-primary"><strong>Salvar</strong></button>
-        <button type="reset" class="btn btn-outline-primary">Cancelar</button>
-    </form>
+
+
+                    <br>
+                    <button type="submit" class="btn btn-outline-primary"><strong>Salvar</strong></button>
+                    <button type="reset" class="btn btn-outline-primary">Cancelar</button>
+                </form>
 </body>
 
 </html>
