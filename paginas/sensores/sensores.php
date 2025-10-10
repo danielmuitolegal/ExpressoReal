@@ -16,7 +16,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item mx-3">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        <a class="nav-link active" aria-current="page" href="../dashboard/">Home</a>
                     </li>
                     <li class="nav-item mx-3">
                         <a class="nav-link active" aria-disabled="true" href="#">Rotas</a>
@@ -35,25 +35,73 @@
 
     <form action="salvar_sensor.php" method="POST">
 
+        <!-- Nome do Sensor -->
 
-        <div class="container">
-            <h1 class="text-center mt-3">Gerenciamento de Sensores</h1>
-        </div>
-
-        <div class="container ">
-            <label for="nome">Nome do Sensor:</label>
-            <input type="text" id="nome" name="nome" placeholder="Ex: Sensor de Temperatura" maxlength="50" required>
-
-            <label for="tipo">Tipo:</label>
-            <input type="text" id="tipo" name="tipo" placeholder="Ex: Temperatura, Umidade..." maxlength="30" required>
-        </div>
+        <section id="cadastro-sensores" class="py-5 bg-light">
+            <div class="container">
+                <h2 class="text-center mb-4 text-secundary">Cadastro de Sensores Ferroviários</h2>
+                <form action="processa_sensor.php" method="POST" class="mx-auto" style="max-width: 600px;">
 
 
+                    <!-- Nome do Sensor -->
+                    <div class="mb-3">
+                        <label for="nome" class="form-label">Nome do Sensor</label>
+                        <input type="text" class="form-control" id="nome" name="nome" placeholder="Ex: Sensor de Temperatura" maxlength="50" required>
+                    </div>
 
-        <br>
-        <button type="submit" class="btn btn-outline-primary"><strong>Salvar</strong></button>
-        <button type="reset" class="btn btn-outline-primary">Cancelar</button>
-    </form>
+                    <!-- Tipo do Sensor -->
+                    <div class="mb-3">
+                        <label for="tipo" class="form-label">Tipo</label>
+                        <input type="text" class="form-control" id="tipo" name="tipo" placeholder="Ex: Temperatura, Umidade..." maxlength="30" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-select" id="status" name="status" required>
+                            <option value="" selected disabled>Selecione o status</option>
+                            <option value="ativo">Ativo</option>
+                            <option value="inativo">Inativo</option>
+                            <option value="manutencao">Em Manutenção</option>
+                        </select>
+                    </div>
+
+                    <br>
+                    <button type="submit" class="btn btn-dark"><strong>Cadastrar sensor</strong></button>
+
+                </form>
+
+
+                <section id="Lista-sensores" class="py-5">
+                    <div class="container">
+                        <h2 class="text-center mb-4 text-dark">Sensores Cadastrados</h2>
+
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered text-center">
+                                <thead class="table-dark">
+                                    <tr>
+
+                                        <th>Nome</th>
+                                        <th>Tipo</th>
+                                        <th>Localização</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    include(listar_sensores.php);
+
+                                    foreach ($sensores as $sensor) {
+                                        echo "<tr>";
+                                        echo "<td>" . htmlspecialchars($sensor['nome']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($sensor['tipo']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($sensor['localizacao']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($sensor['status']) . "</td>";
+                                        echo "</tr>";
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+
 </body>
 
 </html>
