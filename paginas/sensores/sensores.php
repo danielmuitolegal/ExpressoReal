@@ -16,7 +16,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item mx-3">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        <a class="nav-link active" aria-current="page" href="../dashboard/">Home</a>
                     </li>
                     <li class="nav-item mx-3">
                         <a class="nav-link active" aria-disabled="true" href="#">Rotas</a>
@@ -49,11 +49,25 @@
                         <input type="text" class="form-control" id="nome" name="nome" placeholder="Ex: Sensor de Temperatura" maxlength="50" required>
                     </div>
 
+                    <!-- Tipo do Sensor -->
+                    <div class="mb-3">
+                        <label for="tipo" class="form-label">Tipo</label>
+                        <input type="text" class="form-control" id="tipo" name="tipo" placeholder="Ex: Temperatura, Umidade..." maxlength="30" required>
+                    </div>
 
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-select" id="status" name="status" required>
+                            <option value="" selected disabled>Selecione o status</option>
+                            <option value="ativo">Ativo</option>
+                            <option value="inativo">Inativo</option>
+                            <option value="manutencao">Em Manutenção</option>
+                        </select>
+                    </div>
 
                     <br>
-                    <button type="submit" class="btn btn-outline-primary"><strong>Salvar</strong></button>
-                    <button type="reset" class="btn btn-outline-primary">Cancelar</button>
+                    <button type="submit" class="btn btn-outline-primary"><strong>Cadastrar sensor</strong></button>
+                
                 </form>
 </body>
 
