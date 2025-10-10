@@ -39,7 +39,7 @@
 
         <section id="cadastro-sensores" class="py-5 bg-light">
             <div class="container">
-                <h2 class="text-center mb-4 text-primary">Cadastro de Sensores Ferroviários</h2>
+                <h2 class="text-center mb-4 text-secundary">Cadastro de Sensores Ferroviários</h2>
                 <form action="processa_sensor.php" method="POST" class="mx-auto" style="max-width: 600px;">
 
 
@@ -66,14 +66,14 @@
                     </div>
 
                     <br>
-                    <button type="submit" class="btn btn-outline-primary"><strong>Cadastrar sensor</strong></button>
+                    <button type="submit" class="btn btn-dark"><strong>Cadastrar sensor</strong></button>
 
                 </form>
 
 
                 <section id="Lista-sensores" class="py-5">
                     <div class="container">
-                        <h2 class="text-center mb-4 text-primary">Sensores Cadastrados</h2>
+                        <h2 class="text-center mb-4 text-dark">Sensores Cadastrados</h2>
 
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered text-center">
