@@ -25,10 +25,7 @@
                         <a class="nav-link active" aria-disabled="true" href="#">Manutenção</a>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
+               
             </div>
         </div>
     </nav>
@@ -70,37 +67,6 @@
 
                 </form>
 
-
-                <section id="Lista-sensores" class="py-5">
-                    <div class="container">
-                        <h2 class="text-center mb-4 text-dark">Sensores Cadastrados</h2>
-
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered text-center">
-                                <thead class="table-dark">
-                                    <tr>
-
-                                        <th>Nome</th>
-                                        <th>Tipo</th>
-                                        <th>Localização</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    include(listar_sensores.php);
-
-                                    foreach ($sensores as $sensor) {
-                                        echo "<tr>";
-                                        echo "<td>" . htmlspecialchars($sensor['nome']) . "</td>";
-                                        echo "<td>" . htmlspecialchars($sensor['tipo']) . "</td>";
-                                        echo "<td>" . htmlspecialchars($sensor['localizacao']) . "</td>";
-                                        echo "<td>" . htmlspecialchars($sensor['status']) . "</td>";
-                                        echo "</tr>";
-                                    }
-                                    ?>
-                                </tbody>
-                            </table>
 
 </body>
 

@@ -1,4 +1,12 @@
 <?php
+
+require_once '../../bdd/database.php';
+
+$sql = "SELECT titulo, descricao, data, tipo FROM alertas ORDER BY data DESC";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$resultados = $stmt->get_result();
+$alertas = $resultados->fetch_all(MYSQLI_ASSOC);
 // Exemplo de array de alertas (pode vir do banco de dados)
 ?>
 <!DOCTYPE html>
