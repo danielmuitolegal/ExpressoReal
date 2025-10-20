@@ -25,3 +25,12 @@ CREATE TABLE
         DataCadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         StatusSensor VARCHAR(20) DEFAULT 
     );
+
+CREATE TABLE
+    IF NOT EXISTS manutencao (
+        IdManutencao INT PRIMARY KEY AUTO_INCREMENT,
+        NumTrem INT NOT NULL,
+        Descricao VARCHAR(200),
+        StatusManutencao VARCHAR(20) NOT NULL,
+        CodFunc INT NOT NULL
+    )
