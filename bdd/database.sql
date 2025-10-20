@@ -25,3 +25,32 @@ CREATE TABLE
         DataCadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         StatusSensor VARCHAR(20) DEFAULT 
     );
+
+
+    CREATE DATABASE IF NOT EXISTS sistema_trens;
+USE sistema_trens;
+
+CREATE TABLE trens (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  trem INT NOT NULL,
+  descricao VARCHAR(100),
+  cod_funcionario VARCHAR(20)
+);
+
+CREATE TABLE inspecoes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  mes VARCHAR(30),
+  data DATE,
+  descricao VARCHAR(100),
+  status VARCHAR(20),
+  cod_funcionario VARCHAR(20)
+);
+
+-- Alguns dados iniciais:
+INSERT INTO trens (trem, descricao, cod_funcionario)
+VALUES 
+(192, 'Revisão Elétrica', '000687'),
+(218, 'Troca de Freios', '000763'),
+(401, 'Inspeção Geral', '000926'),
+(502, 'Manutenção de Motor', '000453'),
+(217, 'Substituição de Rodas', '000210');
