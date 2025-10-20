@@ -16,3 +16,12 @@ CREATE TABLE
         DataAtualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         SenhaHash char(60) NOT NULL
     );
+
+CREATE TABLE
+    IF NOT EXISTS sensor (
+        IdSensor INT PRIMARY KEY AUTO_INCREMENT,
+        NomeSensor VARCHAR(60) NOT NULL,
+        TipoSensor VARCHAR(60) NOT NULL,
+        DataCadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        StatusSensor VARCHAR(20) DEFAULT 
+    );
