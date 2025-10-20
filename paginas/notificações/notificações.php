@@ -1,3 +1,11 @@
+<?php
+// inicia sessão, precisa disso pra "guardar" quem tá fazendo login
+session_start();
+
+// inclui o banco de dados
+include("../../bdd/database.php");
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 

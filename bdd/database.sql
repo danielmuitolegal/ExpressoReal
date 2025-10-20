@@ -26,10 +26,6 @@ CREATE TABLE
         StatusSensor VARCHAR(20) DEFAULT 
     );
 
-
-    CREATE DATABASE IF NOT EXISTS sistema_trens;
-USE sistema_trens;
-
 CREATE TABLE trens (
   id INT AUTO_INCREMENT PRIMARY KEY,
   trem INT NOT NULL,
@@ -54,3 +50,12 @@ VALUES
 (401, 'Inspeção Geral', '000926'),
 (502, 'Manutenção de Motor', '000453'),
 (217, 'Substituição de Rodas', '000210');
+
+CREATE TABLE
+    IF NOT EXISTS manutencao (
+        IdManutencao INT PRIMARY KEY AUTO_INCREMENT,
+        NumTrem INT NOT NULL,
+        Descricao VARCHAR(200),
+        StatusManutencao VARCHAR(20) NOT NULL,
+        CodFunc INT NOT NULL
+    )
