@@ -19,6 +19,39 @@ include("../../bdd/database.php");
 </head>
 
 <body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="../../imagens/logo.png" alt="logo" width="38" height="30" loading="lazy">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item mx-2"><a class="nav-link active" href="#">Home</a></li>
+                    <li class="nav-item mx-2"><a class="nav-link" href="#">Trens/Rotas</a></li>
+                    <li class="nav-item mx-2"><a class="nav-link" href="#">Manutenção</a></li>
+                </ul>
+
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">Buscar</button>
+                </form>
+
+                <ul class="nav nav-pills ms-3">
+                    <li class="nav-item">
+                        <a class="nav-link bg-primary text-white" href="#">
+                            <img src="https://www.svgrepo.com/show/431413/alert.svg" alt="alerta" width="22">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <div class="container mt-5">
         <div class="card p-4">
             <h1 class=" text-center mb-4 text-secondary">GERENCIAMENTO DE ITINERÁRIOS</h1>
@@ -84,7 +117,7 @@ include("../../bdd/database.php");
                 <select id="tipo" name="tipo" class="form-select" required>
                     <option value="">Selecione...</option>
                     <option value="Ativo">Ativo</option>
-                    <option value="Inativo">Inativo</option>
+                    <option value="Inati-=-=-vo">Inativo</option>
                 </select>
             </div>
         </form>
@@ -99,11 +132,89 @@ include("../../bdd/database.php");
 
         <input type="text" id="titulo" name="titulo" class="form-control mt-3" placeholder="Número do trem:"
             maxlength="80" required>
-        
+
         <input type="text" id="titulo" name="titulo" class="form-control mt-3" placeholder="Paradas:"
             maxlength="80" required>
-    
 
+        <input type="text" id="titulo" name="titulo" class="form-control mt-3" placeholder="Horários:"
+            maxlength="80" required>
+
+        <input type="text" id="titulo" name="titulo" class="form-control mt-3" placeholder="Descrição:"
+            maxlength="80" required>
+
+        <input type="text" id="titulo" name="titulo" class="form-control mt-3" placeholder="Cód. Funcionario:"
+            maxlength="80" required>
+        <button type="submit" class="btn btn-secondary w-300 mt-3">Salvar Rota</button>
+
+        <div class="mb-3 mt-4">
+            </textarea>
+            <table class="table table-striped table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th>ÚLTIMOS TRENS PARTIDOS</th>,
+
+                        <th>PRÓXIMAS CHEGADAS</th>
+
+                    </tr>
+                    <tr>
+                        <td>Trem 103 | SP-RJ | 09:45</td>
+                        <td>Trem 400 | BH-SP | 10:00</td>
+                    </tr>
+                    <tr>
+                        <td>Trem 208 | RJ-MG | 10:15</td>
+                        <td>Trem 225 | RJ-ES | 10:30</td>
+                    </tr>
+                    <tr>
+                        <td>Trem 301 | SP-SC | 10:15</td>
+                        <td>Trem 602 | BA-MG | 11:00</td>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                </tbody>
+            </table>
+
+            </textarea>
+
+
+
+            <div class="mb-3 mt-4">
+                </textarea>
+            </div>
+            <h4 class=" text-center text-secondary mb-3">EDITAR ROTAS</h4>
+            <input type="text" id="titulo" name="titulo" class="form-control" placeholder="Número da rota:"
+                maxlength="80" required>
+
+            <input type="text" id="titulo" name="titulo" class="form-control mt-3" placeholder="Número do trem:"
+                maxlength="80" required>
+
+            <input type="text" id="titulo" name="titulo" class="form-control mt-3" placeholder="Paradas:"
+                maxlength="80" required>
+
+            <input type="text" id="titulo" name="titulo" class="form-control mt-3" placeholder="Horários:"
+                maxlength="80" required>
+
+            <input type="text" id="titulo" name="titulo" class="form-control mt-3" placeholder="Descrição:"
+                maxlength="80" required>
+
+            <input type="text" id="titulo" name="titulo" class="form-control mt-3" placeholder="Cód. Funcionario:"
+                maxlength="80" required>
+            <button type="submit" class="btn btn-secondary w-300 mt-3">Salvar Alterações</button>
+        </div>
+
+        <div class="mb-3 mt-4">
+            </textarea>
+        </div>
+        <h4 class=" text-center text-secondary mb-3">REDIRECIONAMENTO EM TEMPO REAL</h4>
+        <input type="text" id="titulo" name="titulo" class="form-control" placeholder="Número do trem:"
+            maxlength="80" required>
+
+        <input type="text" id="titulo" name="titulo" class="form-control mt-3" placeholder="Nova rota:"
+            maxlength="80" required>
+
+        <input type="text" id="titulo" name="titulo" class="form-control mt-3" placeholder="Cód. Funcionario:"
+            maxlength="80" required>
+
+        
     </div>
-
- </div>
