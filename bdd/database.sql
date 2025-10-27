@@ -58,13 +58,13 @@ CREATE TABLE
         Descricao VARCHAR(200),
         StatusManutencao VARCHAR(20) NOT NULL,
         CodFunc INT NOT NULL
-    )
-
-CREATE TABLE IF NOT EXISTS notificacoes (
-    idNot INT AUTO_INCREMENT PRIMARY KEY,
-    tituloNot VARCHAR(60) NOT NULL,
-    tipoNotificacao VARCHAR(50) NOT NULL, -- Ex: 'alerta_criado', 'manutencao_finalizada', 'inspecao_atualizada'
-    mensagem VARCHAR(255) NOT NULL, -- O texto que aparece no feed.
-    email VARCHAR(60) NOT NULL UNIQUE,
-    data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP,
-);
+    );
+CREATE TABLE
+    IF NOT EXISTS notificacoes (
+        idNotificacoes INT AUTO_INCREMENT PRIMARY KEY,
+        tipo_acao VARCHAR(50) NOT NULL, -- Ex: 'alerta_criado', 'manutencao_finalizada', 'inspecao_atualizada'
+        mensagem_curta VARCHAR(255) NOT NULL, -- O texto que aparece no feed.
+        id_referencia INT, -- O ID da linha na tabela original (alertas, manutencoes, etc.)
+        data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP,
+        lida BOOLEAN DEFAULT FALSE
+    );
