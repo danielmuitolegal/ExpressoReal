@@ -26,37 +26,30 @@ CREATE TABLE
         StatusSensor VARCHAR(20) NOT NULL
     );
 
-CREATE TABLE IF NOT EXISTS trens (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  trem INT NOT NULL,
-  descricao VARCHAR(100),
-  cod_funcionario VARCHAR(20)
-);
+CREATE TABLE
+    IF NOT EXISTS trens (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        trem INT NOT NULL,
+        descricao VARCHAR(100),
+        cod_funcionario VARCHAR(20)
+    );
 
-CREATE TABLE IF NOT EXISTS inspecoes (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  mes VARCHAR(30),
-  data DATE,
-  descricao VARCHAR(100),
-  status VARCHAR(20),
-  cod_funcionario VARCHAR(20)
-);
+CREATE TABLE
+    IF NOT EXISTS inspecoes (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        mes VARCHAR(30),
+        data DATE,
+        descricao VARCHAR(100),
+        status VARCHAR(20),
+        cod_funcionario VARCHAR(20)
+    );
 
-CREATE TABLE IF NOT EXISTS trens_manutencao (
-  trem INT PRIMARY KEY,
-  descricao VARCHAR(100) NOT NULL,
-  cod_funcionario VARCHAR(10) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS calendario_inspecoes (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  mes VARCHAR(20) NOT NULL,
-  data DATE NOT NULL,
-  cod_funcionario VARCHAR(10) NOT NULL,
-  status VARCHAR(20) NOT NULL
-);
-
-
+CREATE TABLE
+    IF NOT EXISTS trens_manutencao (
+        trem INT PRIMARY KEY,
+        descricao VARCHAR(100) NOT NULL,
+        cod_funcionario VARCHAR(10) NOT NULL
+    );
 
 CREATE TABLE
     IF NOT EXISTS manutencao (
@@ -68,10 +61,10 @@ CREATE TABLE
     )
 
 CREATE TABLE IF NOT EXISTS notificacoes (
-    idNotificacoes INT AUTO_INCREMENT PRIMARY KEY,
-    tipo_acao VARCHAR(50) NOT NULL, -- Ex: 'alerta_criado', 'manutencao_finalizada', 'inspecao_atualizada'
-    mensagem_curta VARCHAR(255) NOT NULL, -- O texto que aparece no feed.
-    id_referencia INT, -- O ID da linha na tabela original (alertas, manutencoes, etc.)
+    idNot INT AUTO_INCREMENT PRIMARY KEY,
+    tituloNot VARCHAR(60) NOT NULL,
+    tipoNotificacao VARCHAR(50) NOT NULL, -- Ex: 'alerta_criado', 'manutencao_finalizada', 'inspecao_atualizada'
+    mensagem VARCHAR(255) NOT NULL, -- O texto que aparece no feed.
+    email VARCHAR(60) NOT NULL UNIQUE,
     data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP,
-    lida BOOLEAN DEFAULT FALSE
 );
