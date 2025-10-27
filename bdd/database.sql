@@ -42,24 +42,12 @@ CREATE TABLE IF NOT EXISTS inspecoes (
   cod_funcionario VARCHAR(20)
 );
 
-USE expresso_real;
-
--- Cria a tabela de trens em manutenção
 CREATE TABLE trens_manutencao (
   trem INT PRIMARY KEY,
   descricao VARCHAR(100) NOT NULL,
   cod_funcionario VARCHAR(10) NOT NULL
 );
 
--- Insere os dados da imagem
-INSERT INTO trens_manutencao (trem, descricao, cod_funcionario) VALUES
-(192, 'Revisão Elétrica', '000687'),
-(218, 'Troca de Freios', '000763'),
-(401, 'Inspeção Geral', '000926'),
-(502, 'Manutenção de Motor', '000453'),
-(217, 'Substituição de Rodas', '000210');
-
--- Cria a tabela de calendário de inspeções
 CREATE TABLE calendario_inspecoes (
   id INT AUTO_INCREMENT PRIMARY KEY,
   mes VARCHAR(20) NOT NULL,
@@ -68,11 +56,7 @@ CREATE TABLE calendario_inspecoes (
   status VARCHAR(20) NOT NULL
 );
 
--- Insere os dados da imagem
-INSERT INTO calendario_inspecoes (mes, data, cod_funcionario, status) VALUES
-('Junho', '2025-06-10', '000154', 'Pendente'),
-('Maio', '2025-05-12', '000890', 'Realizada'),
-('Abril', '2025-04-08', '000720', 'Realizada');
+
 
 CREATE TABLE
     IF NOT EXISTS manutencao (
