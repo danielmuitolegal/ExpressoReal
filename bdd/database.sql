@@ -59,3 +59,12 @@ CREATE TABLE
         StatusManutencao VARCHAR(20) NOT NULL,
         CodFunc INT NOT NULL
     )
+
+CREATE TABLE notificacoes (
+    idNotificacoes INT AUTO_INCREMENT PRIMARY KEY,
+    tipo_acao VARCHAR(50) NOT NULL, -- Ex: 'alerta_criado', 'manutencao_finalizada', 'inspecao_atualizada'
+    mensagem_curta VARCHAR(255) NOT NULL, -- O texto que aparece no feed.
+    id_referencia INT, -- O ID da linha na tabela original (alertas, manutencoes, etc.)
+    data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP,
+    lida BOOLEAN DEFAULT FALSE
+);
