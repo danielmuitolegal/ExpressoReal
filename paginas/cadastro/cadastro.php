@@ -129,9 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                             <div class="g-recaptcha" data-sitekey="6LeN5dYrAAAAANP9T3IFdvM8WjtsltfDB1eLgW2h"></div>
                             
-                            <div class="mb-3">
-                                <a href="../cadastroAdmin/cadastroAdmin.php">Tenho um código de admin</a>
-                            </div>
+                    
                             
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-dark btn-lg rounded-3">
