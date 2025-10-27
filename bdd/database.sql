@@ -23,17 +23,17 @@ CREATE TABLE
         NomeSensor VARCHAR(60) NOT NULL,
         TipoSensor VARCHAR(60) NOT NULL,
         DataCadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        StatusSensor VARCHAR(20) DEFAULT 
+        StatusSensor VARCHAR(20) NOT NULL
     );
 
-CREATE TABLE trens (
+CREATE TABLE IF NOT EXISTS trens (
   id INT AUTO_INCREMENT PRIMARY KEY,
   trem INT NOT NULL,
   descricao VARCHAR(100),
   cod_funcionario VARCHAR(20)
 );
 
-CREATE TABLE inspecoes (
+CREATE TABLE IF NOT EXISTS inspecoes (
   id INT AUTO_INCREMENT PRIMARY KEY,
   mes VARCHAR(30),
   data DATE,
