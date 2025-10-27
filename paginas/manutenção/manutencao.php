@@ -73,15 +73,6 @@ $result_inspecoes = $conn->query($sql_inspecoes);
       margin-bottom: 20px;
     }
 
-    .status-pendente {
-      color: orange;
-      font-weight: bold;
-    }
-
-    .status-realizada {
-      color: green;
-      font-weight: bold;
-    }
 
     .form-label {
       font-weight: bold;
@@ -156,7 +147,7 @@ $result_inspecoes = $conn->query($sql_inspecoes);
           <?php
           if ($result_inspecoes->num_rows > 0) {
             while ($row = $result_inspecoes->fetch_assoc()) {
-              $statusIcon = $row['status'] == 'Pendente' ? "<span class='status-pendente'>[⚠] Pendente</span>" : "<span class='status-realizada'>[✔] Realizada</span>";
+              $statusIcon = $row['status'] == 'Pendente' ? "<span class='status-pendente'> Pendente</span>" : "<span class='status-realizada'> Realizada</span>";
               echo "<tr>
                       <td>{$row['mes']}</td>
                       <td>{$row['data']}</td>

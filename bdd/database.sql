@@ -26,37 +26,30 @@ CREATE TABLE
         StatusSensor VARCHAR(20) NOT NULL
     );
 
-CREATE TABLE IF NOT EXISTS trens (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  trem INT NOT NULL,
-  descricao VARCHAR(100),
-  cod_funcionario VARCHAR(20)
-);
+CREATE TABLE
+    IF NOT EXISTS trens (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        trem INT NOT NULL,
+        descricao VARCHAR(100),
+        cod_funcionario VARCHAR(20)
+    );
 
-CREATE TABLE IF NOT EXISTS inspecoes (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  mes VARCHAR(30),
-  data DATE,
-  descricao VARCHAR(100),
-  status VARCHAR(20),
-  cod_funcionario VARCHAR(20)
-);
+CREATE TABLE
+    IF NOT EXISTS inspecoes (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        mes VARCHAR(30),
+        data DATE,
+        descricao VARCHAR(100),
+        status VARCHAR(20),
+        cod_funcionario VARCHAR(20)
+    );
 
-CREATE TABLE IF NOT EXISTS trens_manutencao (
-  trem INT PRIMARY KEY,
-  descricao VARCHAR(100) NOT NULL,
-  cod_funcionario VARCHAR(10) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS calendario_inspecoes (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  mes VARCHAR(20) NOT NULL,
-  data DATE NOT NULL,
-  cod_funcionario VARCHAR(10) NOT NULL,
-  status VARCHAR(20) NOT NULL
-);
-
-
+CREATE TABLE
+    IF NOT EXISTS trens_manutencao (
+        trem INT PRIMARY KEY,
+        descricao VARCHAR(100) NOT NULL,
+        cod_funcionario VARCHAR(10) NOT NULL
+    );
 
 CREATE TABLE
     IF NOT EXISTS manutencao (
