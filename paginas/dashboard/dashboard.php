@@ -7,6 +7,7 @@ if (!isset($_SESSION['usuario_nome'])) {
 }
 
 $nome = $_SESSION['usuario_nome'];
+include 'notificacoes_dropdown.php';
 ?>
 
 <!DOCTYPE html>
@@ -44,6 +45,22 @@ $nome = $_SESSION['usuario_nome'];
       border-radius: 15px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
+
+    .notification-badge {
+    position: absolute;
+    top: 0px; /* Ajusta verticalmente */
+    right: 0px; /* Ajusta horizontalmente */
+    padding: 3px 6px;
+    border-radius: 50%;
+    background: red;
+    color: white;
+    font-size: 10px;
+    }
+
+    .item-notificacao.nao-lida {
+    background-color: #e7f3ff;
+}
+
   </style>
 </head>
 
@@ -76,6 +93,26 @@ $nome = $_SESSION['usuario_nome'];
               <img src="https://www.svgrepo.com/show/431413/alert.svg" alt="alerta" width="22">
             </a>
           </li>
+          <li class="nav-item dropdown">             <a class="nav-link bg-primary text-white position-relative" 
+               href="#" 
+               id="notificacoesDropdown" 
+               role="button" 
+               data-bs-toggle="dropdown" 
+               aria-expanded="false">               <img src="https://www.svgrepo.com/show/431413/alert.svg" alt="alerta" width="22">
+
+                <?php if ($_SESSION['notificacoes_count'] > 0) : ?>
+                    <span class="notification-badge position-absolute translate-middle badge rounded-circle bg-danger">
+                        <?php echo $_SESSION['notificacoes_count']; ?>
+                    </span>
+                <?php endif; ?>
+            </a>
+            
+            <?php 
+                // A gente REINCLUI o arquivo. 
+                // Ele já rodou a lógica e salvou a contagem, agora ele imprime o HTML da lista.
+                include 'notificacoes_dropdown.php'; 
+            ?>
+          </li>
         </ul>
       </div>
     </div>

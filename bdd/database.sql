@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS calendario_inspecoes (
   mes VARCHAR(20) NOT NULL,
   data DATE NOT NULL,
   cod_funcionario VARCHAR(10) NOT NULL,
-  status VARCHAR(20) NOT NULL
+--   status VARCHAR(20) NOT NULL 
 );
 
 
