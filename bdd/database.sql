@@ -67,7 +67,7 @@ CREATE TABLE
         CodFunc INT NOT NULL
     )
 
-CREATE TABLE IF NOT EXISTS  m  notificacoes (
+CREATE TABLE IF NOT EXISTS notificacoes (
     idNotificacoes INT AUTO_INCREMENT PRIMARY KEY,
     tipo_acao VARCHAR(50) NOT NULL, -- Ex: 'alerta_criado', 'manutencao_finalizada', 'inspecao_atualizada'
     mensagem_curta VARCHAR(255) NOT NULL, -- O texto que aparece no feed.
