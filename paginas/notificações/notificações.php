@@ -24,20 +24,6 @@ include("../../bdd/database.php");
             background-color: #f8f9fa;
         }
 
-        .card-custom {
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-
-
-
-
-        body {
-            background-color: #f8f9fa;
-        }
-
         iframe {
             border-radius: 15px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
