@@ -20,37 +20,48 @@ include("../../bdd/database.php");
 
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <img src="../../imagens/logo.png" alt="logo" width="38" height="30" loading="lazy">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+   <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+  <div class="container-fluid">
+    <a class="navbar-brand d-flex align-items-center" href="#">
+      <img src="../../imagens/logo.png" alt="logo" width="38" height="30" loading="lazy" class="me-2">
+      Expresso Real
+    </a>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item mx-2"><a class="nav-link active" href="#">Home</a></li>
-                    <li class="nav-item mx-2"><a class="nav-link" href="#">Trens/Rotas</a></li>
-                    <li class="nav-item mx-2"><a class="nav-link" href="#">Manutenção</a></li>
-                </ul>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
-                    <button class="btn btn-outline-light" type="submit">Buscar</button>
-                </form>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <!-- Links principais -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item mx-2"><a class="nav-link active" href="#">Home</a></li>
+        <li class="nav-item mx-2"><a class="nav-link" href="#">Trens/Rotas</a></li>
+        <li class="nav-item mx-2"><a class="nav-link" href="#">Manutenção</a></li>
+      </ul>
 
-                <ul class="nav nav-pills ms-3">
-                    <li class="nav-item">
-                        <a class="nav-link bg-primary text-white" href="#">
-                            <img src="https://www.svgrepo.com/show/431413/alert.svg" alt="alerta" width="22">
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+      <!-- Campo de pesquisa -->
+      <form class="d-flex me-3" role="search">
+        <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
+        <button class="btn btn-outline-primary" type="submit">Buscar</button>
+      </form>
+
+      <!-- Ícone de alerta -->
+      <ul class="nav nav-pills me-3">
+        <li class="nav-item">
+          <a class="nav-link bg-primary text-white" href="#">
+            <img src="https://www.svgrepo.com/show/431413/alert.svg" alt="alerta" width="22">
+          </a>
+        </li>
+      </ul>
+
+      <!-- Saudação + Sair -->
+      <div class="d-flex align-items-center">
+        <span class="navbar-text me-3">Olá, <?php echo $nome; ?>!</span>
+        <a href="../logout.php" class="btn btn-outline-dark btn-sm">Sair</a>
+      </div>
+    </div>
+  </div>
+</nav>
 
     <div class="container mt-5">
         <div class="card p-4">
