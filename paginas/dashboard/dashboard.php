@@ -20,74 +20,95 @@ $nome = $_SESSION['usuario_nome'];
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+   <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .card-custom {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-title {
+      font-weight: bold;
+      color: #fff;
+      background-color: #6c757d;
+      border-radius: 15px 15px 0 0;
+      padding: 10px 15px;
+    }
+
+    iframe {
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+  </style>
 </head>
 
 <body>
   <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
         <img src="../../imagens/logo.png" alt="logo" width="38" height="30" loading="lazy">
       </a>
-      <div class="collapse navbar-collapse">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item mx-3"><a class="nav-link active" href="#">Home</a></li>
-          <li class="nav-item mx-3"><a class="nav-link active" href="#">Trens/Rotas</a></li>
-          <li class="nav-item mx-3"><a class="nav-link active" href="#">Manutenção</a></li>
-        </ul>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-        <ul class="nav nav-pills">
-          <li class="nav-item mx-3">
-            <a class="nav-link active bg-primary" href="#">
-              <img src="https://www.svgrepo.com/show/431413/alert.svg" alt="alerta" width="24">
-            </a>
-          </li>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item mx-2"><a class="nav-link active" href="#">Home</a></li>
+          <li class="nav-item mx-2"><a class="nav-link" href="#">Trens/Rotas</a></li>
+          <li class="nav-item mx-2"><a class="nav-link" href="#">Manutenção</a></li>
         </ul>
 
         <form class="d-flex" role="search">
           <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Buscar</button>
+          <button class="btn btn-outline-light" type="submit">Buscar</button>
         </form>
+
+        <ul class="nav nav-pills ms-3">
+          <li class="nav-item">
+            <a class="nav-link bg-primary text-white" href="#">
+              <img src="https://www.svgrepo.com/show/431413/alert.svg" alt="alerta" width="22">
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
   </nav>
 
+  <!-- CONTEÚDO PRINCIPAL -->
+  <div class="container mt-4">
+    <h1 class="text-center mb-4">Bem-vindo, <?php echo $nome . "!" ?></h1>
 
-  <div class="container text-center mt-4">
-    <h1 class="text-center mt-3">Bem-vindo, <?php echo $nome . "!" ?></h1>
-  </div>
-  <div class="container-fluid mx-4 d-flex bg-light">
-    <div class="my-2">
-      <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d28613.025616801246!2d-48.830873600000004!3d-26.3061504!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1spt-BR!2sbr!4v1760107365028!5m2!1spt-BR!2sbr" width="600" height="450" style="border:0;" allowfullscreen="false" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    </div>
-    <div>
-      <div class="mt-2 mx-3 rounded" style="background-color: lightgray;">
-        <table>
-          <thead>
-            <tr>
-              <td class="bg-secondary rounded-top">
-                <h2 class="text-light mt-1 mx-2">ATUALMENTE A EXPRESSO REAL TEM:</h2>
-              </td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="border">
-                <p>Cidades atendidas: </p>
-              </td>
-            </tr>
-            <tr>
-              <td class="border">
-                <p>Linhas ferroviárias: </p>
-              </td>
-            </tr>
-            <tr>
-              <td class="border">
-                <p>Trens físicos: </p>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d28613.025616801246!2d-48.830873600000004!3d-26.3061504!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1spt-BR!2sbr!4v1760107365028!5m2!1spt-BR!2sbr"
+          width="100%" height="450" allowfullscreen loading="lazy"></iframe>
+      </div>
+
+      <div class="col-lg-5 d-flex flex-column gap-3">
+        <div class="card card-custom">
+          <div class="section-title">ATUALMENTE A EXPRESSO REAL TEM:</div>
+          <div class="card-body">
+            <p class="mb-2">Cidades atendidas: <strong>12</strong></p>
+            <p class="mb-2">Linhas ferroviárias: <strong>8</strong></p>
+            <p class="mb-0">Trens físicos: <strong>24</strong></p>
+          </div>
+        </div>
+
+        <div class="card card-custom">
+          <div class="section-title">INDICADORES OPERACIONAIS:</div>
+          <div class="card-body">
+            <p class="mb-2">Pontualidade do dia: <strong>98%</strong></p>
+            <p class="mb-2">Consumo energético: <strong>75 MWh</strong></p>
+            <p class="mb-0">Rotas com mais fluxo: <strong>Joinville - Blumenau</strong></p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
