@@ -21,7 +21,7 @@ $nome = $_SESSION['usuario_nome'];
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
-   <style>
+  <style>
     body {
       background-color: #f8f9fa;
     }
@@ -95,18 +95,18 @@ $nome = $_SESSION['usuario_nome'];
         <div class="card card-custom">
           <div class="section-title">ATUALMENTE A EXPRESSO REAL TEM:</div>
           <div class="card-body">
-            <p class="mb-2">Cidades atendidas: <strong>12</strong></p>
-            <p class="mb-2">Linhas ferroviárias: <strong>8</strong></p>
-            <p class="mb-0">Trens físicos: <strong>24</strong></p>
+            <p class="mb-2">Cidades atendidas:</p>
+            <p class="mb-2">Linhas ferroviárias:</p>
+            <p class="mb-0">Trens físicos:</p>
           </div>
         </div>
 
         <div class="card card-custom">
           <div class="section-title">INDICADORES OPERACIONAIS:</div>
           <div class="card-body">
-            <p class="mb-2">Pontualidade do dia: <strong>98%</strong></p>
-            <p class="mb-2">Consumo energético: <strong>75 MWh</strong></p>
-            <p class="mb-0">Rotas com mais fluxo: <strong>Joinville - Blumenau</strong></p>
+            <p class="mb-2">Pontualidade do dia:</p>
+            <p class="mb-2">Consumo energético:</p>
+            <p class="mb-0">Rotas com mais fluxo:</p>
           </div>
         </div>
       </div>
