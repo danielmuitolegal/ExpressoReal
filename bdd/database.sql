@@ -42,13 +42,13 @@ CREATE TABLE IF NOT EXISTS inspecoes (
   cod_funcionario VARCHAR(20)
 );
 
-CREATE TABLE trens_manutencao (
+CREATE TABLE IF NOT EXISTS trens_manutencao (
   trem INT PRIMARY KEY,
   descricao VARCHAR(100) NOT NULL,
   cod_funcionario VARCHAR(10) NOT NULL
 );
 
-CREATE TABLE calendario_inspecoes (
+CREATE TABLE IF NOT EXISTS calendario_inspecoes (
   id INT AUTO_INCREMENT PRIMARY KEY,
   mes VARCHAR(20) NOT NULL,
   data DATE NOT NULL,
@@ -67,7 +67,7 @@ CREATE TABLE
         CodFunc INT NOT NULL
     )
 
-CREATE TABLE notificacoes (
+CREATE TABLE IF NOT EXISTS  m  notificacoes (
     idNotificacoes INT AUTO_INCREMENT PRIMARY KEY,
     tipo_acao VARCHAR(50) NOT NULL, -- Ex: 'alerta_criado', 'manutencao_finalizada', 'inspecao_atualizada'
     mensagem_curta VARCHAR(255) NOT NULL, -- O texto que aparece no feed.
