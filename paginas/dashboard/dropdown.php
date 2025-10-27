@@ -1,27 +1,33 @@
 <?php
-// Arquivo: notificacoes_dropdown.php
+// Arquivo: dropdown.php - CORRIGIDO
 
-// Inclua a conexão (ou defina ela AQUI, se o dashboard ainda não conectou!)
-// Vou assumir que a conexão é feita aqui para garantir que funcione
-$servidor = "localhost";
-$usuario = "seu_usuario_do_mysql";
-$senha = "sua_senha_do_mysql";
-$banco = "seu_banco_de_dados";
+// 1. Inclui o database.php.
+// Ele define $conn (a variável de conexão que usaremos)
+require_once '../../bdd/database.php';
 
-$conexao = new mysqli($servidor, $usuario, $senha, $banco);
+// 🛑 ERRO AQUI: Removida a tentativa de criar uma nova conexão com $conexao,
+// pois o database.php já criou a variável $conn.
+// Removidas as linhas de $servidor, $usuario, $senha, $banco e a criação do mysqli($conexao)
 
-if ($conexao->connect_error) {
-    echo '<div class="dropdown-item">Erro de conexão: ' . $conexao->connect_error . '</div>';
-    exit;
-}
-
+// 🛑 AQUI ESTÁ A CORREÇÃO DA QUERY (USANDO $conn):
 // Busca as notificações não lidas primeiro!
 $sql = "SELECT idNotificacoes, tipo_acao, mensagem_curta, data_criacao, lida 
         FROM notificacoes 
         ORDER BY lida ASC, data_criacao DESC 
-        LIMIT 10"; // Limita para não estourar o dropdown
+        LIMIT 10"; 
 
-$resultado = $conexao->query($sql);
+// 💥 USAMOS $conn para executar a query!
+$resultado = $conn->query($sql); 
+
+// Adicionei uma checagem de erro de query para ser mais útil que a checagem de conexão.
+if ($resultado === false) {
+    echo '<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificacoesDropdown" style="width: 350px;">';
+    echo '<li><div class="dropdown-item">Erro na Query SQL: ' . $conn->error . '</div></li>';
+    echo '</ul>';
+    $conn->close();
+    exit;
+}
+
 $tem_notificacao = $resultado->num_rows > 0;
 $nao_lidas_count = 0; // Para contar e mostrar no ícone
 
@@ -68,6 +74,4 @@ echo '</ul>';
 
 // Define a variável de contagem para ser usada no Dashboard.php
 $_SESSION['notificacoes_count'] = $nao_lidas_count; 
-
-$conexao->close();
 ?>
