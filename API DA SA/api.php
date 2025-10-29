@@ -8,7 +8,7 @@ header('Access-Control-Allow-Headers: Content-Type');
 
 // Configurações do banco de dados
 $host = 'localhost';
-$dbname = 'trem';
+$dbname = 'expresso_real';
 $username = 'root';
 $password = 'root';
 
