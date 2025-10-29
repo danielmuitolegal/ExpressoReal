@@ -1,71 +1,79 @@
 <?php
-
-// inicia sessão, precisa disso pra "guardar" quem tá fazendo login
 session_start();
-
-// inclui o banco de dados
-include("../../bdd/database.php");
+if (!isset($_SESSION['usuario_nome'])) {
+    header("Location: ../login/login.php");
+    exit();
+}
+$usuario = $_SESSION['usuario_nome'];
 ?>
 
-<!DOCTYPE html>
-<html lang="pt-BR">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat</title>
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-</head>
-
-<body>
-
-   <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            <img src="../../imagens/logo.png" alt="logo" width="38" height="30" loading="lazy">
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item mx-2"><a class="nav-link active" href="#">Home</a></li>
-                <li class="nav-item mx-2"><a class="nav-link" href="#">Trens/Rotas</a></li>
-                <li class="nav-item mx-2"><a class="nav-link" href="#">Manutenção</a></li>
-            </ul>
-
-            <form class="d-flex ms-3 me-3 my-2" role="search"> 
-                <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
-                <button class="btn btn-outline-dark" type="submit">Buscar</button>
-            </form>
-
-            <ul class="nav nav-pills ms-3">
-                
-                <li class="nav-item dropdown">
-                    <a class="nav-link bg-primary text-white position-relative"
-                       href="#"
-                       id="notificacoesDropdown"
-                       role="button"
-                       data-bs-toggle="dropdown"
-                       aria-expanded="false">
-                        <img src="https://www.svgrepo.com/show/431413/alert.svg" alt="alerta" width="22">
-
-                        <?php if (isset($_SESSION['notificacoes_count']) && $_SESSION['notificacoes_count'] > 0) : ?>
-                            <span class="notification-badge position-absolute translate-middle badge rounded-circle bg-danger">
-                                <?php echo $_SESSION['notificacoes_count']; ?>
-                            </span>
-                        <?php endif; ?>
-                    </a>
-                    
-                    <?php 
-                        // Note: O dropdown.php não pode ter o require_once 'database.php'; nem o $conn->close();
-                        include '../dashboard/dropdown.php'; 
-                    ?>
-                </li>
-            </ul>
-        </div>
+<div id="chat-container" style="position: fixed; bottom: 20px; right: 20px; width: 300px; border: 1px solid #ccc; border-radius: 10px; background: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.2); z-index: 9999;">
+    <div id="chat-header" style="background: #405de6; color: white; padding: 10px; border-radius: 10px 10px 0 0; cursor: pointer;">
+        💬 Suporte
     </div>
-</nav>
+    <div id="chat-body" style="height: 300px; overflow-y: auto; padding: 10px; display: none;"></div>
+    <div id="chat-footer" style="display: none; border-top: 1px solid #ccc; padding: 5px;">
+        <input type="text" id="mensagem" placeholder="Digite uma mensagem..." style="width: 80%; border: none; outline: none;">
+        <button id="enviar" style="width: 18%; background: #405de6; color: white; border: none; border-radius: 5px;">Enviar</button>
+    </div>
+</div>
+<script>
+// Toggle chat visibility
+document.getElementById('chat-header').addEventListener('click', function() {
+    const body = document.getElementById('chat-body');
+    const footer = document.getElementById('chat-footer');
+    if (body.style.display === 'none') {
+        body.style.display = 'block';
+        footer.style.display = 'block';
+    } else {
+        body.style.display = 'none';
+        footer.style.display = 'none';
+    }
+});
+
+
+
+// Função para carregar mensagens
+function carregarMensagens() {
+    fetch('carregar_mensagens.php')
+    .then(res => res.text())
+    .then(data => {
+        document.getElementById('chat-body').innerHTML = data;
+        document.getElementById('chat-body').scrollTop = document.getElementById('chat-body').scrollHeight;
+    });
+}
+carregarMensagens();
+setInterval(carregarMensagens, 3000);
+
+// Enviar mensagem
+document.getElementById('enviar').addEventListener('click', function() {
+    const msg = document.getElementById('mensagem').value.trim();
+    if (msg === '') return;
+    fetch('enviar_mensagem.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: 'mensagem=' + encodeURIComponent(msg)
+    }).then(() => {
+        document.getElementById('mensagem').value = '';
+        carregarMensagens();
+    });
+});
+</script>
+<?php
+
+session_start();
+require_once '../../bdd/database.php';
+
+if (!isset($_SESSION['usuario_nome'])) exit;
+
+$remetente = $_SESSION['usuario_nome'];
+$destinatario = 'Admin'; // Pode alterar para um sistema dinâmico depois
+$mensagem = trim($_POST['mensagem'] ?? '');
+
+if ($mensagem !== '') {
+    $stmt = $conn->prepare("INSERT INTO mensagens (remetente, destinatario, mensagem) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $remetente, $destinatario, $mensagem);
+    $stmt->execute();
+    $stmt->close();
+}
+$conn->close();

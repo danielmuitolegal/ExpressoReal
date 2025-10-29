@@ -170,12 +170,13 @@ include("../../bdd/database.php");
             <table class="table table-striped table-bordered text-center">
                 <thead>
                     <tr>
+
                         <th>ÚLTIMOS TRENS PARTIDOS</th>,
 
                         <th>PRÓXIMAS CHEGADAS</th>
 
                     </tr>
-                    <tr>
+                    <tr>  
                         <td>Trem 103 | SP-RJ | 09:45</td>
                         <td>Trem 400 | BH-SP | 10:00</td>
                     </tr>
@@ -237,6 +238,10 @@ include("../../bdd/database.php");
         <button type="submit" class="btn btn-secondary w-300 mt-3">Salvar Trem</button>
 
         
+    </div>
+    <div style="margin: 90px;">
+        </textarea>
+
     </div>
 </body>
 </html>
