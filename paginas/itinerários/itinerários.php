@@ -21,19 +21,21 @@ include("../../bdd/database.php");
 </head>
 
 <body>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+  <div class="container-fluid">
+    <a class="navbar-brand d-flex align-items-center" href="../dashboard/dashboard.php">
+      <img src="../../imagens/logo.png" alt="logo" width="38" height="30" loading="lazy" class="me-2">
+      Expresso Real
+    </a>
 
-   <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="../dashboard/dashboard.php">
-            <img src="../../imagens/logo.png" alt="logo" width="38" height="30" loading="lazy">
-        </a>
+ 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item mx-2"><a class="nav-link active" href="../dashboard/dashboard.php">Home</a></li>
                 <li class="nav-item mx-2"><a class="nav-link" href="../itinerários/itinerários.php">Trens/Rotas</a></li>
                 <li class="nav-item mx-2"><a class="nav-link" href="../manutenção/manutencao.php">Manutenção</a></li>
             </ul>
