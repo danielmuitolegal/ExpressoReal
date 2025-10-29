@@ -125,7 +125,7 @@ $result_inspecoes = $conn->query($sql_inspecoes);
       <!-- Saudação + Sair -->
       <div class="d-flex align-items-center">
         <span class="navbar-text me-3">Olá, <?php echo $nome; ?>!</span>
-        <a href="../logout.php" class="btn btn-outline-dark btn-sm">Sair</a>
+        <a href="dashboard/dashbord.php" class="btn btn-outline-dark btn-sm">Sair</a>
       </div>
     </div>
   </div>
