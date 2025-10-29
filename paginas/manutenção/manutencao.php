@@ -23,7 +23,7 @@ $sql_trens = "SELECT trem, descricao, cod_funcionario FROM trens_manutencao";
 $result_trens = $conn->query($sql_trens);
 
 // Consulta calendário de inspeções
-$sql_inspecoes = "SELECT mes, data, cod_funcionario, status FROM calendario_inspecoes";
+$sql_inspecoes = "SELECT mes, data, cod_funcionario, status FROM inspecoes";
 $result_inspecoes = $conn->query($sql_inspecoes);
 ?>
 
