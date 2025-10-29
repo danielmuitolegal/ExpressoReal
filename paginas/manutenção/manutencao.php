@@ -1,14 +1,14 @@
 <?php
 session_start();
 
+
 if (!isset($_SESSION['usuario_nome'])) {
   header("Location: ../login/login.php");
   exit();
 }
 
-$nome = $_SESSION['usuario_nome'];
-
 // Conexão com o banco (ajuste conforme seu ambiente)
+include '../dashboard/dropdown.php';
 
 include_once('../../bdd/database.php');
 // Verifica conexão
