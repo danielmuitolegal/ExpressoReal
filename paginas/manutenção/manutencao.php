@@ -226,7 +226,7 @@ $result_inspecoes = $conn->query($sql_inspecoes);
           <input type="number" class="form-control" placeholder="Ex: 000123">
         </div>
 
-        <button type="button" class="btn btn-secondary btn-outline-dark">Salvar</button>
+        <button type="button" class="btn btn-secondary ">Salvar</button>
         <button type="reset" class="btn btn-secondary">Cancelar</button>
       </form>
     </div>
