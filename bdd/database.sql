@@ -68,3 +68,5 @@ CREATE TABLE
         data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP,
         lida BOOLEAN DEFAULT FALSE
     );
+
+    

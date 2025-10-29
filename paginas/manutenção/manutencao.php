@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+
 if (!isset($_SESSION['usuario_nome'])) {
   header("Location: ../login/login.php");
   exit();
@@ -9,6 +10,7 @@ if (!isset($_SESSION['usuario_nome'])) {
 $nome = $_SESSION['usuario_nome'];
 
 // Conexão com o banco (ajuste conforme seu ambiente)
+include '../dashboard/dropdown.php';
 
 include_once('../../bdd/database.php');
 // Verifica conexão
@@ -21,7 +23,7 @@ $sql_trens = "SELECT trem, descricao, cod_funcionario FROM trens_manutencao";
 $result_trens = $conn->query($sql_trens);
 
 // Consulta calendário de inspeções
-$sql_inspecoes = "SELECT mes, data, cod_funcionario, status FROM calendario_inspecoes";
+$sql_inspecoes = "SELECT mes, data, cod_funcionario, status FROM inspecoes";
 $result_inspecoes = $conn->query($sql_inspecoes);
 ?>
 
@@ -88,7 +90,7 @@ $result_inspecoes = $conn->query($sql_inspecoes);
   <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
   <div class="container-fluid">
-    <a class="navbar-brand d-flex align-items-center" href="#">
+    <a class="navbar-brand d-flex align-items-center" href="../dashboard/dashboard.php">
       <img src="../../imagens/logo.png" alt="logo" width="38" height="30" loading="lazy" class="me-2">
       Expresso Real
     </a>
@@ -100,13 +102,13 @@ $result_inspecoes = $conn->query($sql_inspecoes);
     <div class="collapse navbar-collapse" id="navbarNav">
       <!-- Links principais -->
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item mx-2"><a class="nav-link active" href="#">Home</a></li>
-        <li class="nav-item mx-2"><a class="nav-link" href="#">Trens/Rotas</a></li>
-        <li class="nav-item mx-2"><a class="nav-link" href="#">Manutenção</a></li>
+        <li class="nav-item mx-2"><a class="nav-link active" href="../dashboard/dashboard.php">Home</a></li>
+        <li class="nav-item mx-2"><a class="nav-link active" href="../itinerários/itinerários.php">Trens/Rotas</a></li>
+        <li class="nav-item mx-2"><a class="nav-link active" href="../manutenção/manutencao.php">Manutenção</a></li>
       </ul>
 
       <!-- Campo de pesquisa -->
-      <form class="d-flex me-3" role="search">
+      <form class="d-flex me-3 my-2" role="search">
         <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
         <button class="btn btn-outline-primary" type="submit">Buscar</button>
       </form>
@@ -224,7 +226,7 @@ $result_inspecoes = $conn->query($sql_inspecoes);
           <input type="number" class="form-control" placeholder="Ex: 000123">
         </div>
 
-        <button type="button" class="btn btn-secondary btn-outline-dark">Salvar</button>
+        <button type="button" class="btn btn-secondary ">Salvar</button>
         <button type="reset" class="btn btn-secondary">Cancelar</button>
       </form>
     </div>

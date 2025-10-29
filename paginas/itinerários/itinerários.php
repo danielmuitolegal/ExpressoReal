@@ -24,7 +24,7 @@ include("../../bdd/database.php");
 
    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="../dashboard/dashboard.php">
             <img src="../../imagens/logo.png" alt="logo" width="38" height="30" loading="lazy">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -33,9 +33,9 @@ include("../../bdd/database.php");
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item mx-2"><a class="nav-link active" href="#">Home</a></li>
-                <li class="nav-item mx-2"><a class="nav-link" href="#">Trens/Rotas</a></li>
-                <li class="nav-item mx-2"><a class="nav-link" href="#">Manutenção</a></li>
+                <li class="nav-item mx-2"><a class="nav-link active" href="../dashboard/dashboard.php">Home</a></li>
+                <li class="nav-item mx-2"><a class="nav-link" href="../itinerários/itinerários.php">Trens/Rotas</a></li>
+                <li class="nav-item mx-2"><a class="nav-link" href="../manutenção/manutencao.php">Manutenção</a></li>
             </ul>
 
             <form class="d-flex ms-3 me-3 my-2" role="search"> 
@@ -47,7 +47,7 @@ include("../../bdd/database.php");
                 
                 <li class="nav-item dropdown">
                     <a class="nav-link bg-primary text-white position-relative"
-                       href="#"
+                       href="../dashboard/dropdown.php"
                        id="notificacoesDropdown"
                        role="button"
                        data-bs-toggle="dropdown"
