@@ -7,6 +7,8 @@ if (!isset($_SESSION['usuario_nome'])) {
   exit();
 }
 
+$nome = $_SESSION['usuario_nome'];
+
 // Conexão com o banco (ajuste conforme seu ambiente)
 include '../dashboard/dropdown.php';
 
@@ -106,7 +108,7 @@ $result_inspecoes = $conn->query($sql_inspecoes);
       </ul>
 
       <!-- Campo de pesquisa -->
-      <form class="d-flex me-3" role="search">
+      <form class="d-flex me-3 my-2" role="search">
         <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
         <button class="btn btn-outline-primary" type="submit">Buscar</button>
       </form>
