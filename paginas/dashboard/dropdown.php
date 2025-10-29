@@ -5,11 +5,8 @@
 // Ele define $conn (a variável de conexão que usaremos)
 require_once '../../bdd/database.php';
 
-// 🛑 ERRO AQUI: Removida a tentativa de criar uma nova conexão com $conexao,
-// pois o database.php já criou a variável $conn.
 // Removidas as linhas de $servidor, $usuario, $senha, $banco e a criação do mysqli($conexao)
 
-// 🛑 AQUI ESTÁ A CORREÇÃO DA QUERY (USANDO $conn):
 // Busca as notificações não lidas primeiro!
 $sql = "SELECT idNotificacoes, tipo_acao, mensagem_curta, data_criacao, lida 
         FROM notificacoes 

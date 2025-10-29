@@ -147,6 +147,10 @@ include '../dashboard/dropdown.php';
       </div>
     </div>
   </div>
+
+  <footer>
+        
+  </footer>
 </body>
 
 </html>
