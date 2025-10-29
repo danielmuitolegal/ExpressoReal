@@ -102,7 +102,6 @@ $result_inspecoes = $conn->query($sql_inspecoes);
     <div class="collapse navbar-collapse" id="navbarNav">
       <!-- Links principais -->
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item mx-2"><a class="nav-link active" href="../dashboard/dashboard.php">Home</a></li>
         <li class="nav-item mx-2"><a class="nav-link active" href="../itinerários/itinerários.php">Trens/Rotas</a></li>
         <li class="nav-item mx-2"><a class="nav-link active" href="../manutenção/manutencao.php">Manutenção</a></li>
       </ul>
