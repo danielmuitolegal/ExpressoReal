@@ -48,7 +48,9 @@ CREATE TABLE
     IF NOT EXISTS trens_manutencao (
         trem INT PRIMARY KEY,
         descricao VARCHAR(100) NOT NULL,
-        cod_funcionario VARCHAR(10) NOT NULL
+        cod_funcionario VARCHAR(10) NOT NULL,
+        statusTrensManut VARCHAR (20) NOT NULL,
+        acoes VARCHAR (20) NOT NULL
     );
 
 CREATE TABLE
