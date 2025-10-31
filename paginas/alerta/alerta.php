@@ -10,6 +10,14 @@
 </head>
 
 <body>
+      <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+  <div class="container-fluid">
+    <a class="navbar-brand d-flex align-items-center" href="../dashboard/dashboard.php">
+      <img src="../../imagens/logo.png" alt="logo" width="38" height="30" loading="lazy" class="me-2">
+      Expresso Real
+    </a>
+    
     <div class="container mt-5">
         <div class="card p-4">
             <h1 class=" text-center mb-4 text-secondary">Gerenciamento de Alerta</h1>
