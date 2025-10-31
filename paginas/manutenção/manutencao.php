@@ -19,13 +19,15 @@ if ($conn->connect_error) {
 }
 
 // Consulta trens em manutenção
-$sql_trens = "SELECT trem, descricao, cod_funcionario FROM trens_manutencao";
+$sql_trens = "SELECT trem, descricao, cod_funcionario, statusTrensManut FROM trens_manutencao";
 $result_trens = $conn->query($sql_trens);
 
 // Consulta calendário de inspeções
-$sql_inspecoes = "SELECT mes, data, cod_funcionario, status FROM inspecoes";
+$sql_inspecoes = "SELECT idInspecao, mes, data, descricao, cod_funcionario, status FROM inspecoes";
 $result_inspecoes = $conn->query($sql_inspecoes);
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -89,37 +91,37 @@ $result_inspecoes = $conn->query($sql_inspecoes);
 <body>
   <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-  <div class="container-fluid">
-    <a class="navbar-brand d-flex align-items-center" href="../dashboard/dashboard.php">
-      <img src="../../imagens/logo.png" alt="logo" width="38" height="30" loading="lazy" class="me-2">
-      Expresso Real
-    </a>
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center" href="../dashboard/dashboard.php">
+        <img src="../../imagens/logo.png" alt="logo" width="38" height="30" loading="lazy" class="me-2">
+        Expresso Real
+      </a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <!-- Links principais -->
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item mx-2"><a class="nav-link active" href="../itinerários/itinerários.php">Trens/Rotas</a></li>
-        <li class="nav-item mx-2"><a class="nav-link active" href="../manutenção/manutencao.php">Manutenção</a></li>
-      </ul>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <!-- Links principais -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item mx-2"><a class="nav-link active" href="../itinerários/itinerários.php">Trens/Rotas</a></li>
+          <li class="nav-item mx-2"><a class="nav-link active" href="../manutenção/manutencao.php">Manutenção</a></li>
+        </ul>
 
-      <!-- Campo de pesquisa -->
-      <form class="d-flex me-3 my-2" role="search">
-        <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
-        <button class="btn btn-outline-primary" type="submit">Buscar</button>
-      </form>
+        <!-- Campo de pesquisa -->
+        <form class="d-flex me-3 my-2" role="search">
+          <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
+          <button class="btn btn-outline-primary" type="submit">Buscar</button>
+        </form>
 
-      <!-- Ícone de alerta -->
-      <ul class="nav nav-pills me-3">
-        <li class="nav-item">
-          <a class="nav-link bg-primary text-white" href="#">
-            <img src="https://www.svgrepo.com/show/431413/alert.svg" alt="alerta" width="22">
-          </a>
-        </li>
-      </ul>
+        <!-- Ícone de alerta -->
+        <ul class="nav nav-pills me-3">
+          <li class="nav-item">
+            <a class="nav-link bg-primary text-white" href="#">
+              <img src="https://www.svgrepo.com/show/431413/alert.svg" alt="alerta" width="22">
+            </a>
+          </li>
+        </ul>
 
       <!-- Saudação + Sair -->
       <div class="d-flex align-items-center">
@@ -137,26 +139,40 @@ $result_inspecoes = $conn->query($sql_inspecoes);
       <table class="table table-sm table-striped mt-2">
         <thead class="table-dark">
           <tr>
-            <th>Trem</th>
-            <th>Descrição</th>
+            <th>Mês</th>
+            <th>Data</th>
             <th>Cód. Funcionário</th>
+            <th>Status</th>
+            <th>Ações</th>
           </tr>
         </thead>
         <tbody>
           <?php
           if ($result_trens->num_rows > 0) {
+
             while ($row = $result_trens->fetch_assoc()) {
               echo "<tr>
                       <td>{$row['trem']}</td>
                       <td>{$row['descricao']}</td>
                       <td>{$row['cod_funcionario']}</td>
+                      <td>{$row['statusTrensManut']}</td>
+
+       <td>
+          <a href='excluir_registro.php?tipo=manutencao&id={$row['trem']}' 
+          class='btn btn-sm btn-danger'
+          onclick=\"return confirm('Confirma exclusão da manutenção do trem {$row['trem']}?');\"
+          title='Excluir Registro'> X
+          </a>
+       </td>
                     </tr>";
             }
           } else {
-            echo "<tr><td colspan='3'>Nenhum trem em manutenção.</td></tr>";
+
+            echo "<tr><td colspan='5'>Nenhum trem em manutenção.</td></tr>";
           }
           ?>
         </tbody>
+
       </table>
     </div>
 
@@ -170,23 +186,37 @@ $result_inspecoes = $conn->query($sql_inspecoes);
             <th>Data</th>
             <th>Cód. Funcionário</th>
             <th>Status</th>
+            <th>Ações</th>
           </tr>
         </thead>
         <tbody>
+
           <?php
           if ($result_inspecoes->num_rows > 0) {
             while ($row = $result_inspecoes->fetch_assoc()) {
               $statusIcon = $row['status'] == 'Pendente' ? "<span class='status-pendente'> Pendente</span>" : "<span class='status-realizada'> Realizada</span>";
               echo "<tr>
-                      <td>{$row['mes']}</td>
-                      <td>{$row['data']}</td>
-                      <td>{$row['cod_funcionario']}</td>
-                      <td>$statusIcon</td>
-                    </tr>";
+                       <td>{$row['mes']}</td>
+                       <td>{$row['data']}</td>
+                       <td>{$row['cod_funcionario']}</td>
+                       <td>$statusIcon</td>
+                      <td>
+                <a href='excluir_registro.php?tipo=inspecao&id={$row['idInspecao']}' 
+                  class='btn btn-sm btn-danger'
+                  onclick=\"return confirm('Confirma exclusão da inspeção de {$row['mes']}?');\"
+                  title='Excluir Registro'> X
+                </a>
+              </td>
+            </tr>";
             }
           } else {
-            echo "<tr><td colspan='4'>Nenhuma inspeção registrada.</td></tr>";
+            echo "<tr>
+              <td colspan='5'>Nenhuma inspeção registrada.
+              </td>
+              </tr>";
           }
+
+
           ?>
         </tbody>
       </table>
