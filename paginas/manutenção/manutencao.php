@@ -123,14 +123,14 @@ $result_inspecoes = $conn->query($sql_inspecoes);
           </li>
         </ul>
 
-        <!-- Saudação + Sair -->
-        <div class="d-flex align-items-center">
-          <span class="navbar-text me-3">Olá, <?php echo $nome; ?>!</span>
-          <a href="../logout.php" class="btn btn-outline-dark btn-sm">Sair</a>
-        </div>
+      <!-- Saudação + Sair -->
+      <div class="d-flex align-items-center">
+        <span class="navbar-text me-3">Olá, <?php echo $nome; ?>!</span>
+        <a href="dashboard/dashbord.php" class="btn btn-outline-dark btn-sm">Sair</a>
       </div>
     </div>
-  </nav>
+  </div>
+</nav>
 
   <div class="container mt-4">
     <!-- TRENS EM MANUTENÇÃO -->
