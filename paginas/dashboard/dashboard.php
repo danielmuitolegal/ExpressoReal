@@ -1,14 +1,70 @@
 <?php
 session_start();
 
+include '../dashboard/dropdown.php';
+include '../chat/chat.php';
+include '../../bdd/database.php';
+
 if (!isset($_SESSION['usuario_nome'])) {
   header("Location: ../login/login.php");
   exit();
 }
 
 $nome = $_SESSION['usuario_nome'];
-include '../dashboard/dropdown.php';
-include '../chat/chat.php';
+
+$mostrarRota = '';
+
+// Executa a query para pegar todas as rotas
+$queryRotas = "SELECT * FROM rotas ORDER BY id";
+$resultRotas = $conn->query($queryRotas);
+
+if ($resultRotas->num_rows > 0) {
+  while ($rota = $resultRotas->fetch_assoc()) {
+    $idRota = $rota['id'];
+
+    $queryEstacoes = "
+      SELECT e.nome
+      FROM estacoes e
+      INNER JOIN rota_estacoes re ON e.id = re.id_estacao
+      WHERE re.id_rota = $idRota
+      ORDER BY re.ordem ASC
+    ";
+    $resEstacoes = $conn->query($queryEstacoes);
+    $estacoes = [];
+    while ($e = $resEstacoes->fetch_assoc()) {
+      $estacoes[] = $e['nome'];
+    }
+
+    $mostrarRota .= '<div class="mb-2 p-2 border rounded">';
+    $mostrarRota .= '<strong>' . htmlspecialchars($rota['nome']) . '</strong><br>';
+    $mostrarRota .= 'Distância: ' . htmlspecialchars($rota['distancia_km']) . ' km<br>';
+    $mostrarRota .= 'Tempo estimado: ' . htmlspecialchars($rota['tempo_estimado_min']) . ' min<br>';
+    $mostrarRota .= 'Estações: ' . implode(' → ', $estacoes);
+    $mostrarRota .= '</div>';
+  }
+} else {
+  $mostrarRota = '<p>Nenhuma rota cadastrada.</p>';
+}
+
+$sql = "SELECT COUNT(endereco) AS total1 FROM estacoes";
+
+$result1 = $conn->query($sql);
+
+if ($result1) {
+  $row1 = $result1->fetch_assoc();
+} else {
+  echo 'Erro: ' . $conn->error;
+}
+
+$sql = "SELECT COUNT(nome) AS total2 FROM rotas";
+
+$result2 = $conn->query($sql);
+
+if ($result2) {
+  $row2 = $result2->fetch_assoc();
+} else {
+  echo 'Erro: ' . $conn->error;
+}
 ?>
 
 <!DOCTYPE html>
@@ -71,13 +127,13 @@ include '../chat/chat.php';
 </head>
 
 <body>
-    <!-- NAVBAR -->
+  <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-  <div class="container-fluid">
-    <a class="navbar-brand d-flex align-items-center" href="../dashboard/dashboard.php">
-      <img src="../../imagens/logo.png" alt="logo" width="38" height="30" loading="lazy" class="me-2">
-      Expresso Real
-    </a>
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center" href="../dashboard/dashboard.php">
+        <img src="../../imagens/logo.png" alt="logo" width="38" height="30" loading="lazy" class="me-2">
+        Expresso Real
+      </a>
 
 
       <div class="collapse navbar-collapse" id="navbarNav">
@@ -132,11 +188,12 @@ include '../chat/chat.php';
       <!-- ESTATÍSTICAS E ROTAS -->
       <div class="col-lg-5 d-flex flex-column gap-3">
         <!-- ESTATÍSTICAS -->
+
         <div class="card card-custom">
           <div class="section-title">ATUALMENTE A EXPRESSO REAL TEM:</div>
           <div class="card-body" id="stats-container">
-            <p class="mb-2">Cidades atendidas: <span id="cities-count"></span></p>
-            <p class="mb-2">Linhas ferroviárias: <span id="routes-count"></span></p>
+            <p class="mb-2">Cidades atendidas: <?php echo "$row1[total1]";?><span id="cities-count"></span></p>
+            <p class="mb-2">Linhas ferroviárias: <?php echo "$row2[total2]";?><span id="routes-count"></span></p>
             <p class="mb-0">Trens físicos: <span id="trains-count"></span></p>
           </div>
         </div>
@@ -145,7 +202,9 @@ include '../chat/chat.php';
         <div class="card card-custom">
           <div class="section-title">ROTAS</div>
           <div class="card-body" id="routes-container">
-            <p>Carregando rotas...</p>
+            <?php
+              echo $mostrarRota;
+            ?>
           </div>
         </div>
       </div>
