@@ -60,7 +60,7 @@ if (isset($_GET['tipo']) && isset($_GET['id'])) {
     // Parâmetros GET não encontrados, mantém a mensagem de erro inicial.
 }
 
-end_of_script:
+
 $conn->close();
 
 // 4. Redirecionar de volta para a página de manutenção, enviando o status e a mensagem
