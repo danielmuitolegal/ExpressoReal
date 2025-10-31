@@ -23,6 +23,10 @@ include '../chat/chat.php';
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
   <style>
     body {
       background-color: #f8f9fa;
@@ -117,39 +121,80 @@ include '../chat/chat.php';
 
   <!-- CONTEÚDO PRINCIPAL -->
   <div class="container mt-4">
-    <h1 class="text-center mb-4">Bem-vindo, <?php echo $nome . "!" ?></h1>
+    <h1 class="text-center mb-4">Bem-vindo, <?php echo $nome; ?>!</h1>
 
     <div class="row g-4">
+      <!-- MAPA -->
       <div class="col-lg-7">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d28613.025616801246!2d-48.830873600000004!3d-26.3061504!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1spt-BR!2sbr!4v1760107365028!5m2!1spt-BR!2sbr"
-          width="100%" height="450" allowfullscreen loading="lazy"></iframe>
+        <div id="map" style="width: 100%; height: 450px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"></div>
       </div>
 
+      <!-- ESTATÍSTICAS E ROTAS -->
       <div class="col-lg-5 d-flex flex-column gap-3">
+        <!-- ESTATÍSTICAS -->
         <div class="card card-custom">
           <div class="section-title">ATUALMENTE A EXPRESSO REAL TEM:</div>
-          <div class="card-body">
-            <p class="mb-2">Cidades atendidas:</p>
-            <p class="mb-2">Linhas ferroviárias:</p>
-            <p class="mb-0">Trens físicos:</p>
+          <div class="card-body" id="stats-container">
+            <p class="mb-2">Cidades atendidas: <span id="cities-count"></span></p>
+            <p class="mb-2">Linhas ferroviárias: <span id="routes-count"></span></p>
+            <p class="mb-0">Trens físicos: <span id="trains-count"></span></p>
           </div>
         </div>
 
+        <!-- ROTAS -->
         <div class="card card-custom">
-          <div class="section-title">INDICADORES OPERACIONAIS:</div>
-          <div class="card-body">
-            <p class="mb-2">Pontualidade do dia:</p>
-            <p class="mb-2">Consumo energético:</p>
-            <p class="mb-0">Rotas com mais fluxo:</p>
+          <div class="section-title">ROTAS</div>
+          <div class="card-body" id="routes-container">
+            <p>Carregando rotas...</p>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <script>
+    const map = L.map('map').setView([-23.55, -46.63], 5);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    async function carregarDados() {
+      const estacoesRes = await fetch('../../api/api.php?action=get_stations');
+      const estacoes = await estacoesRes.json();
+
+      const rotasRes = await fetch('../../api/api.php?action=get_routes');
+      const rotas = await rotasRes.json();
+
+      // Atualiza estatísticas
+      const cidadesUnicas = [...new Set(estacoes.map(e => e.endereco.trim().toLowerCase()))];
+      document.getElementById('cities-count').innerText = cidadesUnicas.length;
+      document.getElementById('routes-count').innerText = rotas.length;
+      document.getElementById('trains-count').innerText = 5; // ou outro valor vindo da API
+
+      // Adiciona marcadores das estações no mapa
+      estacoes.forEach(e => {
+        L.marker([parseFloat(e.latitude), parseFloat(e.longitude)]).addTo(map)
+          .bindPopup(`<b>${e.nome}</b><br>${e.endereco}`);
+      });
+
+      // Desenha rotas no mapa
+      rotas.forEach(r => {
+        if (r.estacoes.length > 1) {
+          const pontos = r.estacoes.map(e => [parseFloat(e.latitude), parseFloat(e.longitude)]);
+          L.polyline(pontos, {
+              color: 'blue',
+              weight: 3
+            })
+            .addTo(map)
+            .bindPopup(`<b>${r.nome}</b><br>${r.distancia_km} km`);
+        }
+      });
+    }
+
+    carregarDados();
+  </script>
 </body>
-
-
-
-
 
 </html>
