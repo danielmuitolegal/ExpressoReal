@@ -148,10 +148,6 @@ if ($result2) {
           <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
           <button class="btn btn-outline-dark" type="submit">Buscar</button>
         </form>
-        <form class="d-flex ms-3 me-3 my-2" role="search">
-          <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
-          <button class="btn btn-outline-dark" type="submit">Buscar</button>
-        </form>
 
         <ul class="nav nav-pills ms-3 d-flex align-items-center">
 
