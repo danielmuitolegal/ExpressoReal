@@ -36,7 +36,7 @@ CREATE TABLE
 
 CREATE TABLE
     IF NOT EXISTS inspecoes (
-        id INT AUTO_INCREMENT PRIMARY KEY,
+        idInspecao INT AUTO_INCREMENT PRIMARY KEY,
         mes VARCHAR(30),
         data DATE,
         descricao VARCHAR(100),
@@ -49,8 +49,7 @@ CREATE TABLE
         trem INT PRIMARY KEY,
         descricao VARCHAR(100) NOT NULL,
         cod_funcionario VARCHAR(10) NOT NULL,
-        statusTrensManut VARCHAR (20) NOT NULL,
-        acoes VARCHAR (20) NOT NULL
+        statusTrensManut VARCHAR (20) NOT NULL
     );
 
 CREATE TABLE

@@ -19,13 +19,15 @@ if ($conn->connect_error) {
 }
 
 // Consulta trens em manutenção
-$sql_trens = "SELECT trem, descricao, cod_funcionario, statusTrensManut, acoes FROM trens_manutencao";
+$sql_trens = "SELECT trem, descricao, cod_funcionario, statusTrensManut FROM trens_manutencao";
 $result_trens = $conn->query($sql_trens);
 
 // Consulta calendário de inspeções
-$sql_inspecoes = "SELECT mes, data, cod_funcionario, status FROM inspecoes";
+$sql_inspecoes = "SELECT idInspecao, mes, data, descricao, cod_funcionario, status FROM inspecoes";
 $result_inspecoes = $conn->query($sql_inspecoes);
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -121,14 +123,14 @@ $result_inspecoes = $conn->query($sql_inspecoes);
           </li>
         </ul>
 
-        <!-- Saudação + Sair -->
-        <div class="d-flex align-items-center">
-          <span class="navbar-text me-3">Olá, <?php echo $nome; ?>!</span>
-          <a href="../logout.php" class="btn btn-outline-dark btn-sm">Sair</a>
-        </div>
+      <!-- Saudação + Sair -->
+      <div class="d-flex align-items-center">
+        <span class="navbar-text me-3">Olá, <?php echo $nome; ?>!</span>
+        <a href="dashboard/dashbord.php" class="btn btn-outline-dark btn-sm">Sair</a>
       </div>
     </div>
-  </nav>
+  </div>
+</nav>
 
   <div class="container mt-4">
     <!-- TRENS EM MANUTENÇÃO -->
@@ -137,8 +139,8 @@ $result_inspecoes = $conn->query($sql_inspecoes);
       <table class="table table-sm table-striped mt-2">
         <thead class="table-dark">
           <tr>
-            <th>Trem</th>
-            <th>Descrição</th>
+            <th>Mês</th>
+            <th>Data</th>
             <th>Cód. Funcionário</th>
             <th>Status</th>
             <th>Ações</th>
@@ -147,20 +149,30 @@ $result_inspecoes = $conn->query($sql_inspecoes);
         <tbody>
           <?php
           if ($result_trens->num_rows > 0) {
+
             while ($row = $result_trens->fetch_assoc()) {
               echo "<tr>
                       <td>{$row['trem']}</td>
                       <td>{$row['descricao']}</td>
                       <td>{$row['cod_funcionario']}</td>
                       <td>{$row['statusTrensManut']}</td>
-                      <td>{$row['acoes']}</td>
+
+       <td>
+          <a href='excluir_registro.php?tipo=manutencao&id={$row['trem']}' 
+          class='btn btn-sm btn-danger'
+          onclick=\"return confirm('Confirma exclusão da manutenção do trem {$row['trem']}?');\"
+          title='Excluir Registro'> X
+          </a>
+       </td>
                     </tr>";
             }
           } else {
-            echo "<tr><td colspan='3'>Nenhum trem em manutenção.</td></tr>";
+
+            echo "<tr><td colspan='5'>Nenhum trem em manutenção.</td></tr>";
           }
           ?>
         </tbody>
+
       </table>
     </div>
 
@@ -174,23 +186,37 @@ $result_inspecoes = $conn->query($sql_inspecoes);
             <th>Data</th>
             <th>Cód. Funcionário</th>
             <th>Status</th>
+            <th>Ações</th>
           </tr>
         </thead>
         <tbody>
+
           <?php
           if ($result_inspecoes->num_rows > 0) {
             while ($row = $result_inspecoes->fetch_assoc()) {
               $statusIcon = $row['status'] == 'Pendente' ? "<span class='status-pendente'> Pendente</span>" : "<span class='status-realizada'> Realizada</span>";
               echo "<tr>
-                      <td>{$row['mes']}</td>
-                      <td>{$row['data']}</td>
-                      <td>{$row['cod_funcionario']}</td>
-                      <td>$statusIcon</td>
-                    </tr>";
+                       <td>{$row['mes']}</td>
+                       <td>{$row['data']}</td>
+                       <td>{$row['cod_funcionario']}</td>
+                       <td>$statusIcon</td>
+                      <td>
+                <a href='excluir_registro.php?tipo=inspecao&id={$row['idInspecao']}' 
+                  class='btn btn-sm btn-danger'
+                  onclick=\"return confirm('Confirma exclusão da inspeção de {$row['mes']}?');\"
+                  title='Excluir Registro'> X
+                </a>
+              </td>
+            </tr>";
             }
           } else {
-            echo "<tr><td colspan='4'>Nenhuma inspeção registrada.</td></tr>";
+            echo "<tr>
+              <td colspan='5'>Nenhuma inspeção registrada.
+              </td>
+              </tr>";
           }
+
+
           ?>
         </tbody>
       </table>
