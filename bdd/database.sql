@@ -81,7 +81,7 @@ CREATE TABLE
         `data_criacao` timestamp NOT NULL DEFAULT current_timestamp()
     );
 
-CREATE TABLE `rotas` (
+CREATE TABLE rotas (
   `id` int(11) NOT NULL,
   `nome` varchar(100) NOT NULL,
   `distancia_km` decimal(8,2) DEFAULT NULL,
@@ -89,7 +89,7 @@ CREATE TABLE `rotas` (
   `data_criacao` timestamp NOT NULL DEFAULT current_timestamp()
 );
 
-CREATE TABLE `rota_estacoes` (
+CREATE TABLE rota_estacoes (
   `id` int(11) NOT NULL,
   `id_rota` int(11) NOT NULL,
   `id_estacao` int(11) NOT NULL,
