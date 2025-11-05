@@ -182,7 +182,6 @@ if ($result2) {
       </div>
     </div>
   </nav>
-  </nav>
 
   <!-- CONTEÚDO PRINCIPAL -->
   <div class="container mt-4">
