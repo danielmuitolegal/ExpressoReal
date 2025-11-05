@@ -10,8 +10,8 @@ USE expresso_real;
 CREATE TABLE
     IF NOT EXISTS usuario (
         IdUsuario INT PRIMARY KEY AUTO_INCREMENT,
-        NomeUsuario VARCHAR(60) NOT NULL UNIQUE,
-        EmailUsuario VARCHAR(60) NOT NULL UNIQUE,
+        NomeUsuario VARCHAR(60) NOT NULL,
+        EmailUsuario VARCHAR(60) NOT NULL,
         DataCadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         DataAtualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         SenhaHash char(60) NOT NULL
@@ -81,7 +81,7 @@ CREATE TABLE
         `data_criacao` timestamp NOT NULL DEFAULT current_timestamp()
     );
 
-CREATE TABLE `rotas` (
+CREATE TABLE rotas (
   `id` int(11) NOT NULL,
   `num_trem` int(11) not null,
   `nome` varchar(100) NOT NULL,
@@ -90,7 +90,7 @@ CREATE TABLE `rotas` (
   `data_criacao` timestamp NOT NULL DEFAULT current_timestamp()
 );
 
-CREATE TABLE `rota_estacoes` (
+CREATE TABLE rota_estacoes (
   `id` int(11) NOT NULL,
   `id_rota` int(11) NOT NULL,
   `id_estacao` int(11) NOT NULL,
