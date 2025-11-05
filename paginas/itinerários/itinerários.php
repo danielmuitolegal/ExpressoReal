@@ -163,6 +163,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['numero_rota'])) {
         const novaParada = document.getElementById('novaParada');
         const horaParada = document.getElementById('horaParada');
 
+        let contadorParadas = 0;
+
         addBtn.addEventListener('click', () => {
             const parada = novaParada.value.trim();
             const horario = horaParada.value;
@@ -179,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['numero_rota'])) {
             hiddenHora.value = horario;
 
             const item = document.createElement('p');
-            item.textContent = `#${listaParadas.children.length / 2 + 1} - ${parada} (${horario})`;
+            item.textContent = `#${contadorParadas} - ${parada} (${horario})`;
             item.classList.add('text-secondary');
 
             listaParadas.appendChild(item);
