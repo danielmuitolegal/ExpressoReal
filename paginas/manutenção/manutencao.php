@@ -1,6 +1,10 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['nome'])) {
+  header("Location: ../login/login.php");
+  exit();
+}
 
 if (!isset($_SESSION['usuario_nome'])) {
   header("Location: ../login/login.php");
@@ -123,14 +127,14 @@ $result_inspecoes = $conn->query($sql_inspecoes);
           </li>
         </ul>
 
-      <!-- Saudação + Sair -->
-      <div class="d-flex align-items-center">
-        <span class="navbar-text me-3">Olá, <?php echo $nome; ?>!</span>
-        <a href="dashboard/dashbord.php" class="btn btn-outline-dark btn-sm">Sair</a>
+        <!-- Saudação + Sair -->
+        <div class="d-flex align-items-center">
+          <span class="navbar-text me-3">Olá, <?php echo $nome; ?>!</span>
+          <a href="../dashboard/logout.php" class="btn btn-outline-dark btn-sm">Sair</a>
+        </div>
       </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
   <div class="container mt-4">
     <!-- TRENS EM MANUTENÇÃO -->
