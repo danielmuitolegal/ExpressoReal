@@ -10,8 +10,8 @@ USE expresso_real;
 CREATE TABLE
     IF NOT EXISTS usuario (
         IdUsuario INT PRIMARY KEY AUTO_INCREMENT,
-        NomeUsuario VARCHAR(60) NOT NULL UNIQUE,
-        EmailUsuario VARCHAR(60) NOT NULL UNIQUE,
+        NomeUsuario VARCHAR(60) NOT NULL,
+        EmailUsuario VARCHAR(60) NOT NULL,
         DataCadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         DataAtualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         SenhaHash char(60) NOT NULL
