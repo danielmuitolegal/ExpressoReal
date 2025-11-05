@@ -5,9 +5,10 @@ include '../dashboard/dropdown.php';
 include '../chat/chat.php';
 include '../../bdd/database.php';
 
-if (!isset($_SESSION['usuario_nome'])) {
-  header("Location: ../login/login.php");
-  exit();
+
+if (!isset($_SESSION['nome'])) {
+    header("Location: ../login/login.php");
+    exit();
 }
 
 $nome = $_SESSION['usuario_nome'];
@@ -176,12 +177,11 @@ if ($result2) {
           </li>
           <div class="d-flex align-items-center">
             <span class="navbar-text me-3">Olá, <?php echo $nome; ?>!</span>
-            <a href="dashboard/dashbord.php" class="btn btn-outline-dark btn-sm">Sair</a>
+            <a href="logout.php" class="btn btn-outline-dark btn-sm">Sair</a>
           </div>
         </ul>
       </div>
     </div>
-  </nav>
   </nav>
 
   <!-- CONTEÚDO PRINCIPAL -->
