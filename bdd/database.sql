@@ -82,7 +82,7 @@ CREATE TABLE
     );
 
 CREATE TABLE rotas (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `num_trem` int(11) not null,
   `nome` varchar(100) NOT NULL,
   `distancia_km` decimal(8,2) DEFAULT NULL,
@@ -91,7 +91,7 @@ CREATE TABLE rotas (
 );
 
 CREATE TABLE rota_estacoes (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `id_rota` int(11) NOT NULL,
   `id_estacao` int(11) NOT NULL,
   `ordem` int(11) NOT NULL
@@ -197,7 +197,7 @@ VALUES
     );
 
 INSERT INTO `rotas` (`id`, `num_trem`, `nome`, `distancia_km`, `tempo_estimado_min`, `data_criacao`) VALUES
-(1, , 10, 'Rota Sul-Norte', 3511.25, 3511, '2025-10-27 15:36:21');
+(1, 10, 'Rota Sul-Norte', 3511.25, 3511, '2025-10-27 15:36:21');
     
 INSERT INTO `rota_estacoes` (`id`, `id_rota`, `id_estacao`, `ordem`) VALUES
 (1, 1, 1, 0),
