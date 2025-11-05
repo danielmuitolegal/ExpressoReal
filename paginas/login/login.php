@@ -8,7 +8,7 @@ include("../../bdd/database.php");
 
 // variável pra caso a senha ou usuário estiver errado
 $mensagem = "";
-$_SESSION['nome'] = $nome;
+
 
 // verificar se formulário foi enviado
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
