@@ -79,7 +79,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['numero_rota'])) {
 </head>
 
 <body>
-    <!-- NAVBAR -->
    <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
     <div class="container-fluid">
