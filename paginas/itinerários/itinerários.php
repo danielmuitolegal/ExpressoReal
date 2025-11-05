@@ -1,6 +1,7 @@
 <?php
 include '../../bdd/database.php';
 session_start();
+$nome = $_SESSION['nome'] ?? 'Usuário';
 
 // ⚙️ Quando o formulário for enviado
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['numero_rota'])) {
@@ -79,54 +80,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['numero_rota'])) {
 
 <body>
     <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-        <div class="container-fluid">
-            <a class="navbar-brand d-flex align-items-center" href="../dashboard/dashboard.php">
-                <img src="../../imagens/logo.png" alt="logo" width="38" height="30" loading="lazy" class="me-2">
-                Expresso Real
+   <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="../dashboard/dashboard.php">
+        <img src="../../imagens/logo.png" alt="logo" width="38" height="30" loading="lazy">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item mx-2"><a class="nav-link active" href="../dashboard/dashboard.php">Home</a></li>
+          <li class="nav-item mx-2"><a class="nav-link active" href="../itinerários/itinerários.php">Trens/Rotas</a></li>
+          <li class="nav-item mx-2"><a class="nav-link active" href="../manutenção/manutencao.php">Manutenção</a></li>
+        </ul>
+
+        <form class="d-flex ms-3 me-3 my-2" role="search">
+          <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
+          <button class="btn btn-outline-dark" type="submit">Buscar</button>
+        </form>
+
+        <ul class="nav nav-pills ms-3 d-flex align-items-center">
+
+          <li class="nav-item dropdown me-3 d-flex align-items-center">
+            <a class="nav-link bg-primary text-white position-relative"
+              href="#"
+              id="notificacoesDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <img src="https://www.svgrepo.com/show/431413/alert.svg" alt="alerta" width="22">
+
+
+              <?php if (isset($_SESSION['notificacoes_count']) && $_SESSION['notificacoes_count'] > 0) : ?>
+                <span class="notification-badge position-absolute translate-middle badge rounded-circle bg-danger">
+                  <?php echo $_SESSION['notificacoes_count']; ?>
+                </span>
+              <?php endif; ?>
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item mx-2"><a class="nav-link" href="../itinerários/itinerários.php">Trens/Rotas</a></li>
-                    <li class="nav-item mx-2"><a class="nav-link" href="../manutenção/manutencao.php">Manutenção</a></li>
-                </ul>
-
-                <form class="d-flex ms-3 me-3 my-2" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
-                    <button class="btn btn-outline-dark" type="submit">Buscar</button>
-                </form>
-                <form class="d-flex ms-3 me-3 my-2" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
-                    <button class="btn btn-outline-dark" type="submit">Buscar</button>
-                </form>
-
-                <ul class="nav nav-pills ms-3">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link bg-primary text-white position-relative"
-                            href="../dashboard/dropdown.php"
-                            id="notificacoesDropdown"
-                            role="button"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            <img src="https://www.svgrepo.com/show/431413/alert.svg" alt="alerta" width="22">
-                            <?php if (isset($_SESSION['notificacoes_count']) && $_SESSION['notificacoes_count'] > 0) : ?>
-                                <span class="notification-badge position-absolute translate-middle badge rounded-circle bg-danger">
-                                    <?php echo $_SESSION['notificacoes_count']; ?>
-                                </span>
-                            <?php endif; ?>
-                        </a>
-
-                        <?php include '../dashboard/dropdown.php'; ?>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+            <?php
+            // Note: O dropdown.php não pode ter o require_once 'database.php'; nem o $conn->close();
+            include '../dashboard/dropdown.php';
+            ?>
+          </li>
+          <div class="d-flex align-items-center">
+            <span class="navbar-text me-3">Olá, <?php echo $nome; ?>!</span>
+            <a href="dashboard/dashbord.php" class="btn btn-outline-dark btn-sm">Sair</a>
+          </div>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
     <!-- CONTEÚDO -->
     <div class="container mt-5">
