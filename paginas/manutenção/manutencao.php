@@ -83,14 +83,6 @@ $result_inspecoes = $conn->query($sql_inspecoes);
           <button class="btn btn-outline-primary" type="submit">Buscar</button>
         </form>
 
-        <ul class="nav nav-pills me-3">
-          <li class="nav-item">
-            <a class="nav-link bg-primary text-white" href="#">
-              <img src="https://www.svgrepo.com/show/431413/alert.svg" alt="alerta" width="22">
-            </a>
-          </li>
-        </ul>
-
         <div class="d-flex align-items-center">
           <span class="navbar-text me-3">Olá, <?php echo htmlspecialchars($nome); ?>!</span>
           <a href="../login/logout.php" class="btn btn-outline-dark btn-sm">Sair</a>
@@ -119,13 +111,13 @@ $result_inspecoes = $conn->query($sql_inspecoes);
           <?php if ($result_trens && $result_trens->num_rows > 0): ?>
             <?php while ($row = $result_trens->fetch_assoc()): ?>
               <tr>
-                <td><?php echo htmlspecialchars($row['trem']); ?></td>
-                <td><?php echo htmlspecialchars($row['descricao']); ?></td>
-                <td><?php echo htmlspecialchars($row['cod_funcionario']); ?></td>
-                <td><?php echo htmlspecialchars($row['statusTrensManut']); ?></td>
+                <td><?= htmlspecialchars($row['trem']) ?></td>
+                <td><?= htmlspecialchars($row['descricao']) ?></td>
+                <td><?= htmlspecialchars($row['cod_funcionario']) ?></td>
+                <td><?= htmlspecialchars($row['statusTrensManut']) ?></td>
                 <td>
-                  <a href="crud_manutencao.php?acao=editar&id=<?php echo urlencode($row['trem']); ?>" class="btn btn-sm btn-primary btn-acao">Alterar</a>
-                  <a href="crud_manutencao.php?acao=excluir&id=<?php echo urlencode($row['trem']); ?>" class="btn btn-sm btn-danger btn-acao"
+                  <a href="crud_manutencao.php?acao=editar&id=<?= urlencode($row['trem']) ?>" class="btn btn-sm btn-primary btn-acao">Alterar</a>
+                  <a href="crud_manutencao.php?acao=excluir&id=<?= urlencode($row['trem']) ?>" class="btn btn-sm btn-danger btn-acao"
                      onclick="return confirm('Deseja realmente excluir este registro?');">Excluir</a>
                 </td>
               </tr>
@@ -141,7 +133,7 @@ $result_inspecoes = $conn->query($sql_inspecoes);
     <div class="caixa">
       <div class="titulo-secao">CALENDÁRIO DE INSPEÇÕES</div>
 
-      <table class="table table-striped table-sm">
+      <table id="tabelaInspecoes" class="table table-striped table-sm">
         <thead class="table-dark">
           <tr>
             <th>Mês</th>
@@ -156,10 +148,10 @@ $result_inspecoes = $conn->query($sql_inspecoes);
           <?php if ($result_inspecoes && $result_inspecoes->num_rows > 0): ?>
             <?php while ($row = $result_inspecoes->fetch_assoc()): ?>
               <tr>
-                <td><?php echo htmlspecialchars($row['mes']); ?></td>
-                <td><?php echo htmlspecialchars($row['data']); ?></td>
-                <td><?php echo htmlspecialchars($row['descricao']); ?></td>
-                <td><?php echo htmlspecialchars($row['cod_funcionario']); ?></td>
+                <td><?= htmlspecialchars($row['mes']) ?></td>
+                <td><?= htmlspecialchars($row['data']) ?></td>
+                <td><?= htmlspecialchars($row['descricao']) ?></td>
+                <td><?= htmlspecialchars($row['cod_funcionario']) ?></td>
                 <td>
                   <?php if ($row['status'] === 'Pendente'): ?>
                     <span class="status-pendente">Pendente</span>
@@ -168,8 +160,8 @@ $result_inspecoes = $conn->query($sql_inspecoes);
                   <?php endif; ?>
                 </td>
                 <td>
-                  <a href="crud_inspecao.php?acao=editar&id=<?php echo urlencode($row['idInspecao']); ?>" class="btn btn-sm btn-primary btn-acao">Alterar</a>
-                  <a href="crud_inspecao.php?acao=excluir&id=<?php echo urlencode($row['idInspecao']); ?>" class="btn btn-sm btn-danger btn-acao"
+                  <a href="crud_inspecao.php?acao=editar&id=<?= urlencode($row['idInspecao']) ?>" class="btn btn-sm btn-primary btn-acao">Alterar</a>
+                  <a href="crud_inspecao.php?acao=excluir&id=<?= urlencode($row['idInspecao']) ?>" class="btn btn-sm btn-danger btn-acao"
                      onclick="return confirm('Deseja realmente excluir esta inspeção?');">Excluir</a>
                 </td>
               </tr>
@@ -181,11 +173,12 @@ $result_inspecoes = $conn->query($sql_inspecoes);
       </table>
     </div>
 
-    <!-- FORMULÁRIO: ADICIONAR INSPEÇÃO -->
+    <!-- FORMULÁRIO: ADICIONAR INSPEÇÃO (COM AJAX) -->
     <div class="caixa">
       <div class="titulo-secao">ADICIONAR NOVA INSPEÇÃO</div>
+      <div id="mensagem"></div>
 
-      <form action="crud_inspecao.php" method="POST" class="mt-3">
+      <form id="formInspecao" class="mt-3">
         <input type="hidden" name="acao" value="inserir">
         <div class="row mb-3">
           <div class="col-md-4">
@@ -257,10 +250,44 @@ $result_inspecoes = $conn->query($sql_inspecoes);
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+  document.getElementById("formInspecao").addEventListener("submit", async function(e){
+    e.preventDefault();
+    const formData = new FormData(this);
+
+    const resposta = await fetch("crud_inspecao.php", {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await resposta.json();
+    const msg = document.getElementById("mensagem");
+
+    msg.innerHTML = `<div class="alert ${data.success ? 'alert-success' : 'alert-danger'} mt-3">${data.mensagem}</div>`;
+
+    if (data.success) {
+      const tabela = document.querySelector("#tabelaInspecoes tbody");
+      const novaLinha = document.createElement("tr");
+      novaLinha.innerHTML = `
+        <td>${data.row.mes}</td>
+        <td>${data.row.data}</td>
+        <td>${data.row.descricao}</td>
+        <td>${data.row.cod_funcionario}</td>
+        <td>${data.row.status === 'Pendente'
+          ? '<span class="status-pendente">Pendente</span>'
+          : '<span class="status-realizada">Realizada</span>'}</td>
+        <td>
+          <a href="crud_inspecao.php?acao=editar&id=${data.row.idInspecao}" class="btn btn-sm btn-primary btn-acao">Alterar</a>
+          <a href="crud_inspecao.php?acao=excluir&id=${data.row.idInspecao}" class="btn btn-sm btn-danger btn-acao" onclick="return confirm('Deseja realmente excluir esta inspeção?');">Excluir</a>
+        </td>`;
+      tabela.prepend(novaLinha);
+      this.reset();
+    }
+  });
+  </script>
 </body>
 </html>
 
 <?php
-// fecha conexão
 $conn->close();
 ?>
