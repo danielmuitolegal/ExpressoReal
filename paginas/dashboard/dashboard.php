@@ -170,7 +170,6 @@ if ($result2) {
 
 
             <?php
-            // Note: O dropdown.php não pode ter o require_once 'database.php'; nem o $conn->close();
             include '../dashboard/dropdown.php';
             ?>
           </li>
