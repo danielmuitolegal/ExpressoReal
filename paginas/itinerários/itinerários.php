@@ -3,62 +3,103 @@ include '../../bdd/database.php';
 session_start();
 $nome = $_SESSION['nome'] ?? 'Usuário';
 
-// ⚙️ Quando o formulário for enviado
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['numero_rota'])) {
-    $nomeRota = $_POST['numero_rota'];
-    $numTrem = $_POST['numero_trem'];
-    $descricao = $_POST['descricao'];
-    $codFunc = $_POST['cod_funcionario'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // DADOS DA ROTA
+    $numero_rota = $_POST['numero_rota'] ?? '';
+    $numero_trem = $_POST['numero_trem'] ?? '';
+    $nome_rota = $_POST['nome_rota'] ?? '';
 
-    // paradas: nome da estação
-    $paradas = $_POST['paradas'] ?? [];
-    $horarios = $_POST['horarios'] ?? []; // formato igual às paradas (índices correspondem)
+    // PARADAS (arrays)
+    $id_estacoes = $_POST['id_estacao'] ?? [];      // ex: [1,3,5]
+    $datas_horas = $_POST['data_hora'] ?? [];      // ex: ['2025-10-27 11:11:09', ...]
 
-    // 🧮 Exemplo de distância e tempo (pode mudar)
-    $distancia = count($paradas) * 100;
-    $tempo = count($paradas) * 60;
+    // validação básica da rota
+    if (!$numero_rota || !$numero_trem || !$nome_rota) {
+        echo "<p style='color:red;'>Preencha número da rota, número do trem e nome da rota.</p>";
+    } else {
+        // 1) criar rota
+        $stmtRota = $conn->prepare("INSERT INTO rotas (num_trem, nome, distancia_km, tempo_estimado_min) VALUES (?, ?, ?, ?)");
+        // calculos de exemplo para distância/tempo (ajuste conforme quiser)
+        function calcularDistancia($lat1, $lon1, $lat2, $lon2)
+        {
+            $raioTerra = 6371; // km
+            $dLat = deg2rad($lat2 - $lat1);
+            $dLon = deg2rad($lon2 - $lon1);
+            $a = sin($dLat / 2) * sin($dLat / 2) +
+                cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
+                sin($dLon / 2) * sin($dLon / 2);
+            $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+            return $raioTerra * $c;
+        }
 
-    // 1️⃣ Inserir rota principal
-    $stmt = $conn->prepare("INSERT INTO rotas (num_trem, nome, distancia_km, tempo_estimado_min) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("isdi", $numTrem, $nomeRota, $distancia, $tempo);
-    $stmt->execute();
-    $idRota = $conn->insert_id;
+        // calcular distância total da rota
+        $distancia_total = 0;
+        for ($i = 0; $i < count($id_estacoes) - 1; $i++) {
+            $stmt = $conn->prepare("SELECT latitude, longitude FROM estacoes WHERE id = ?");
+            $stmt->bind_param("i", $id_estacoes[$i]);
+            $stmt->execute();
+            $res1 = $stmt->get_result()->fetch_assoc();
 
-    // 2️⃣ Inserir paradas associadas
-    $ordem = 1;
-    $stmtEstacao = $conn->prepare("SELECT id, latitude, longitude FROM estacoes WHERE nome = ?");
-    $stmtInsert = $conn->prepare("INSERT INTO rota_estacoes (id_rota, id_estacao, ordem) VALUES (?, ?, ?)");
+            $stmt->bind_param("i", $id_estacoes[$i + 1]);
+            $stmt->execute();
+            $res2 = $stmt->get_result()->fetch_assoc();
 
-    foreach ($paradas as $i => $nomeEstacao) {
-        $dataHora = $horarios[$i] ?? date('Y-m-d H:i:s');
+            if ($res1 && $res2) {
+                $distancia_total += calcularDistancia(
+                    $res1['latitude'],
+                    $res1['longitude'],
+                    $res2['latitude'],
+                    $res2['longitude']
+                );
+            }
+        }
 
-        // Buscar ID e coordenadas da estação
-        $stmtEstacao->bind_param("s", $nomeEstacao);
-        $stmtEstacao->execute();
-        $result = $stmtEstacao->get_result();
-        $estacao = $result->fetch_assoc();
+        $distancia = round($distancia_total, 2);
+        $tempo = round($distancia_total / 1.0);
+        
+        $stmtRota->bind_param("isdi", $numero_trem, $nome_rota, $distancia, $tempo);
 
-        if ($estacao) {
-            $idEstacao = $estacao['id'];
-            // Inserir na tabela rota_estacoes
-            $stmtInsert->bind_param("iii", $idRota, $idEstacao, $ordem);
-            $stmtInsert->execute();
+        if (!$stmtRota->execute()) {
+            echo "<p style='color:red;'>Erro ao criar rota: " . htmlspecialchars($stmtRota->error) . "</p>";
+        } else {
+            $id_rota = $conn->insert_id;
+            echo "<p style='color:green;'>Rota '" . htmlspecialchars($nome_rota) . "' criada com sucesso (ID: $id_rota).</p>";
 
-            // Atualiza a data/hora da parada diretamente na estação
-            $conn->query("UPDATE estacoes SET data_criacao = '$dataHora' WHERE id = $idEstacao");
-            $ordem++;
+            // 2) inserir paradas vinculadas à rota
+            $stmtCheck = $conn->prepare("SELECT nome, latitude, longitude FROM estacoes WHERE id = ?");
+            $stmtInsert = $conn->prepare("INSERT INTO rota_estacoes (id_rota, id_estacao, ordem, data_hora) VALUES (?, ?, ?, ?)");
+
+            $ordem = 1;
+            for ($i = 0; $i < count($id_estacoes); $i++) {
+                $id_estacao = (int)$id_estacoes[$i];
+                $data_hora = $datas_horas[$i] ?? date('Y-m-d H:i:s');
+
+                // checar existência da estação
+                $stmtCheck->bind_param("i", $id_estacao);
+                $stmtCheck->execute();
+                $res = $stmtCheck->get_result();
+
+                if ($res->num_rows === 0) {
+                    echo "<p style='color:red;'>Erro: estação com ID $id_estacao não encontrada — parada ignorada.</p>";
+                    continue;
+                }
+
+                $est = $res->fetch_assoc();
+                $nome_estacao = $est['nome'];
+
+                // inserir em rota_estacoes
+                $stmtInsert->bind_param("iiis", $id_rota, $id_estacao, $ordem, $data_hora);
+                if ($stmtInsert->execute()) {
+                    echo "<p style='color:green;'>Parada adicionada: ({$ordem}) {$nome_estacao} — {$data_hora}</p>";
+                    $ordem++;
+                } else {
+                    echo "<p style='color:red;'>Erro ao inserir parada ID $id_estacao: " . htmlspecialchars($stmtInsert->error) . "</p>";
+                }
+            } // fim foreach paradas
+
+            echo "<p style='color:green; font-weight:bold;'>Rota '" . htmlspecialchars($nome_rota) . "' criada com suas paradas.</p>";
         }
     }
-
-    unset($_SESSION['paradas_temp']);
-
-    echo "<script>
-        alert('Rota salva com sucesso!');
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('listaParadas').innerHTML = '';
-            document.getElementById('rotaForm').reset();
-        });
-    </script>";
 }
 ?>
 
@@ -89,77 +130,75 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['numero_rota'])) {
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item mx-2"><a class="nav-link active" href="../dashboard/dashboard.php">Home</a></li>
-          <li class="nav-item mx-2"><a class="nav-link active" href="../itinerários/itinerários.php">Trens/Rotas</a></li>
-          <li class="nav-item mx-2"><a class="nav-link active" href="../manutenção/manutencao.php">Manutenção</a></li>
-        </ul>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item mx-2"><a class="nav-link active" href="../dashboard/dashboard.php">Home</a></li>
+                    <li class="nav-item mx-2"><a class="nav-link active" href="../itinerários/itinerários.php">Trens/Rotas</a></li>
+                    <li class="nav-item mx-2"><a class="nav-link active" href="../manutenção/manutencao.php">Manutenção</a></li>
+                </ul>
 
-        <form class="d-flex ms-3 me-3 my-2" role="search">
-          <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
-          <button class="btn btn-outline-dark" type="submit">Buscar</button>
-        </form>
+                <form class="d-flex ms-3 me-3 my-2" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
+                    <button class="btn btn-outline-dark" type="submit">Buscar</button>
+                </form>
 
-        <ul class="nav nav-pills ms-3 d-flex align-items-center">
+                <ul class="nav nav-pills ms-3 d-flex align-items-center">
 
-          <li class="nav-item dropdown me-3 d-flex align-items-center">
-            <a class="nav-link bg-primary text-white position-relative"
-              href="#"
-              id="notificacoesDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false">
-              <img src="https://www.svgrepo.com/show/431413/alert.svg" alt="alerta" width="22">
-
-
-              <?php if (isset($_SESSION['notificacoes_count']) && $_SESSION['notificacoes_count'] > 0) : ?>
-                <span class="notification-badge position-absolute translate-middle badge rounded-circle bg-danger">
-                  <?php echo $_SESSION['notificacoes_count']; ?>
-                </span>
-              <?php endif; ?>
-            </a>
+                    <li class="nav-item dropdown me-3 d-flex align-items-center">
+                        <a class="nav-link bg-primary text-white position-relative"
+                            href="#"
+                            id="notificacoesDropdown"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <img src="https://www.svgrepo.com/show/431413/alert.svg" alt="alerta" width="22">
 
 
-            <?php
-            // Note: O dropdown.php não pode ter o require_once 'database.php'; nem o $conn->close();
-            include '../dashboard/dropdown.php';
-            ?>
-          </li>
-          <div class="d-flex align-items-center">
-            <span class="navbar-text me-3">Olá, <?php echo $nome; ?>!</span>
-            <a href="dashboard/dashbord.php" class="btn btn-outline-dark btn-sm">Sair</a>
-          </div>
-        </ul>
-      </div>
-    </div>
-  </nav>
+                            <?php if (isset($_SESSION['notificacoes_count']) && $_SESSION['notificacoes_count'] > 0) : ?>
+                                <span class="notification-badge position-absolute translate-middle badge rounded-circle bg-danger">
+                                    <?php echo $_SESSION['notificacoes_count']; ?>
+                                </span>
+                            <?php endif; ?>
+                        </a>
+
+
+                        <?php
+                        // Note: O dropdown.php não pode ter o require_once 'database.php'; nem o $conn->close();
+                        include '../dashboard/dropdown.php';
+                        ?>
+                    </li>
+                    <div class="d-flex align-items-center">
+                        <span class="navbar-text me-3">Olá, <?php echo $nome; ?>!</span>
+                        <a href="dashboard/dashbord.php" class="btn btn-outline-dark btn-sm">Sair</a>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
     <!-- CONTEÚDO -->
     <div class="container mt-5">
         <div class="card p-4">
-            <h1 class="text-center text-secondary">GERENCIAMENTO DE ITINERÁRIOS</h1>
-            <h4 class="text-center text-secondary mb-3">CRIAR NOVAS ROTAS</h4>
-
+            <h4 class="mb-3">Criar nova rota</h4>
             <form id="rotaForm" method="POST">
-                <input type="text" name="numero_rota" class="form-control" placeholder="Número da rota:" required>
-                <input type="text" name="numero_trem" class="form-control mt-3" placeholder="Número do trem:" required>
+                <div class="row g-2">
+                    <div class="col-md-4"><input name="numero_rota" class="form-control" placeholder="Número da rota" required></div>
+                    <div class="col-md-4"><input name="numero_trem" class="form-control" placeholder="Número do trem" required></div>
+                    <div class="col-md-4"><input name="nome_rota" class="form-control" placeholder="Nome da rota" required></div>
+                </div>
 
-                <div id="paradasContainer" class="mt-3">
-                    <label class="text-secondary">Paradas:</label>
-                    <div id="listaParadas"></div>
+                <div class="mt-3">
+                    <label class="form-label">Paradas</label>
+                    <div id="listaParadas" class="mb-2"></div>
 
-                    <div class="input-group mt-2">
-                        <input type="text" id="novaParada" class="form-control" placeholder="Nome da estação">
-                        <input type="datetime-local" id="horaParada" class="form-control">
-                        <button type="button" id="addParada" class="btn btn-secondary">Adicionar parada</button>
+                    <div class="row g-2">
+                        <div class="col-md-4"><input type="number" id="idEstacao" class="form-control" placeholder="ID da estação"></div>
+                        <div class="col-md-4"><input type="datetime-local" id="horaParada" class="form-control"></div>
+                        <div class="col-md-4 d-grid"><button type="button" id="addParada" class="btn btn-secondary">Adicionar parada</button></div>
                     </div>
                 </div>
 
-                <input type="text" name="descricao" class="form-control mt-3" placeholder="Descrição:" required>
-                <input type="text" name="cod_funcionario" class="form-control mt-3" placeholder="Cód. Funcionário:" required>
-
-                <button type="submit" class="btn btn-secondary w-100 mt-3">Salvar Rota</button>
+                <button class="btn btn-secondary w-100 mt-3">Salvar Rota</button>
             </form>
         </div>
     </div>
@@ -167,39 +206,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['numero_rota'])) {
     <script>
         const addBtn = document.getElementById('addParada');
         const listaParadas = document.getElementById('listaParadas');
-        const novaParada = document.getElementById('novaParada');
+        const idEstacao = document.getElementById('idEstacao');
         const horaParada = document.getElementById('horaParada');
-
-        let contadorParadas = 0;
+        let contador = 0;
 
         addBtn.addEventListener('click', () => {
-            const parada = novaParada.value.trim();
-            const horario = horaParada.value;
-            if (parada === '' || horario === '') return alert('Preencha o nome da estação e o horário.');
+            const id = idEstacao.value.trim();
+            const hora = horaParada.value;
+            if (!id || !hora) return alert('Preencha ID da estação e horário.');
 
-            const hiddenNome = document.createElement('input');
-            hiddenNome.type = 'hidden';
-            hiddenNome.name = 'paradas[]';
-            hiddenNome.value = parada;
+            contador++;
+
+            // elementos ocultos que serão enviados no form
+            const hiddenId = document.createElement('input');
+            hiddenId.type = 'hidden';
+            hiddenId.name = 'id_estacao[]';
+            hiddenId.value = id;
 
             const hiddenHora = document.createElement('input');
             hiddenHora.type = 'hidden';
-            hiddenHora.name = 'horarios[]';
-            hiddenHora.value = horario;
+            hiddenHora.name = 'data_hora[]';
+            hiddenHora.value = hora.replace('T', ' ');
 
-            const item = document.createElement('p');
-            item.textContent = `#${contadorParadas} - ${parada} (${horario})`;
-            item.classList.add('text-secondary');
-
-            listaParadas.appendChild(item);
-            listaParadas.appendChild(hiddenNome);
+            // exibição
+            const p = document.createElement('p');
+            p.className = 'mb-1 text-secondary';
+            p.textContent = `#${contador} - Estação ID ${id} — ${hora}`;
+            listaParadas.appendChild(p);
+            listaParadas.appendChild(hiddenId);
             listaParadas.appendChild(hiddenHora);
 
-            novaParada.value = '';
+            idEstacao.value = '';
             horaParada.value = '';
         });
     </script>
 </body>
-
 
 </html>
