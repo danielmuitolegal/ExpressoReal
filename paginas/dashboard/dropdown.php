@@ -5,6 +5,13 @@
 // Ele define $conn (a variável de conexão que usaremos)
 require_once '../../bdd/database.php';
 
+if (!isset($_SESSION['usuario_nome'])) {
+    header("Location: ../login/login.php");
+    exit();
+}
+
+$nome = $_SESSION['usuario_nome'];
+
 // Removidas as linhas de $servidor, $usuario, $senha, $banco e a criação do mysqli($conexao)
 
 // Busca as notificações não lidas primeiro!

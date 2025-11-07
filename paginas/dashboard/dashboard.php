@@ -5,8 +5,7 @@ include '../dashboard/dropdown.php';
 include '../chat/chat.php';
 include '../../bdd/database.php';
 
-
-if (!isset($_SESSION['nome'])) {
+if (!isset($_SESSION['usuario_nome'])) {
     header("Location: ../login/login.php");
     exit();
 }
