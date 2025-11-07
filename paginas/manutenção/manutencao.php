@@ -80,7 +80,7 @@ $result_inspecoes = $conn->query($sql_inspecoes);
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item mx-2"><a class="nav-link" href="../itinerarios/itinerarios.php">Trens/Rotas</a></li>
-          <li class="nav-item mx-2"><a class="nav-link active" href="#">Manutenção</a></li>
+          <li class="nav-item mx-2"><a class="nav-link active" href="../manutenção/manutencao.php">Manutenção</a></li>
         </ul>
 
         <form class="d-flex me-3 my-2" role="search">
