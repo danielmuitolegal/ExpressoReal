@@ -4,6 +4,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 include_once('../../bdd/database.php');
 
+
 if ($conn->connect_error) {
     echo json_encode(['success' => false, 'mensagem' => 'Falha na conexão com o banco.']);
     exit;

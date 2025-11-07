@@ -14,10 +14,10 @@ include_once('../../bdd/database.php');
 
 // Verifica conexão
 if ($conn->connect_error) {
-    die("Falha na conexão: " . $conn->connect_error);
+  die("Falha na conexão: " . $conn->connect_error);
 }
 
-// Carrega dados (Read)
+// Consultas
 $sql_trens = "SELECT trem, descricao, cod_funcionario, statusTrensManut FROM trens_manutencao ORDER BY trem ASC";
 $result_trens = $conn->query($sql_trens);
 
@@ -60,6 +60,7 @@ $result_inspecoes = $conn->query($sql_inspecoes);
   </style>
 </head>
 <body>
+
   <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
     <div class="container-fluid">
@@ -68,43 +69,23 @@ $result_inspecoes = $conn->query($sql_inspecoes);
         Expresso Real
       </a>
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item mx-2"><a class="nav-link" href="../itinerarios/itinerarios.php">Trens/Rotas</a></li>
           <li class="nav-item mx-2"><a class="nav-link active" href="../manutenção/manutencao.php">Manutenção</a></li>
         </ul>
 
-        <form class="d-flex me-3 my-2" role="search">
-          <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
-          <button class="btn btn-outline-primary" type="submit">Buscar</button>
-        </form>
-
-        <ul class="nav nav-pills me-3">
-          <li class="nav-item">
-            <a class="nav-link bg-primary text-white" href="#">
-              <img src="https://www.svgrepo.com/show/431413/alert.svg" alt="alerta" width="22">
-            </a>
-          </li>
-        </ul>
-
-        <div class="d-flex align-items-center">
-          <span class="navbar-text me-3">Olá, <?php echo htmlspecialchars($nome); ?>!</span>
-          <a href="../login/logout.php" class="btn btn-outline-dark btn-sm">Sair</a>
-        </div>
+        <span class="navbar-text me-3">Olá, <?php echo htmlspecialchars($nome); ?>!</span>
+        <a href="../login/logout.php" class="btn btn-outline-dark btn-sm">Sair</a>
       </div>
     </div>
   </nav>
 
   <div class="container mt-4">
 
-    <!-- TRENS EM MANUTENÇÃO -->
+    <!-- 🛠️ TRENS EM MANUTENÇÃO -->
     <div class="caixa">
       <div class="titulo-secao">TRENS EM MANUTENÇÃO</div>
-
       <table class="table table-striped table-sm">
         <thead class="table-dark">
           <tr>
@@ -119,14 +100,13 @@ $result_inspecoes = $conn->query($sql_inspecoes);
           <?php if ($result_trens && $result_trens->num_rows > 0): ?>
             <?php while ($row = $result_trens->fetch_assoc()): ?>
               <tr>
-                <td><?php echo htmlspecialchars($row['trem']); ?></td>
-                <td><?php echo htmlspecialchars($row['descricao']); ?></td>
-                <td><?php echo htmlspecialchars($row['cod_funcionario']); ?></td>
-                <td><?php echo htmlspecialchars($row['statusTrensManut']); ?></td>
+                <td><?= htmlspecialchars($row['trem']); ?></td>
+                <td><?= htmlspecialchars($row['descricao']); ?></td>
+                <td><?= htmlspecialchars($row['cod_funcionario']); ?></td>
+                <td><?= htmlspecialchars($row['statusTrensManut']); ?></td>
                 <td>
-                  <a href="crud_manutencao.php?acao=editar&id=<?php echo urlencode($row['trem']); ?>" class="btn btn-sm btn-primary btn-acao">Alterar</a>
-                  <a href="crud_manutencao.php?acao=excluir&id=<?php echo urlencode($row['trem']); ?>" class="btn btn-sm btn-danger btn-acao"
-                     onclick="return confirm('Deseja realmente excluir este registro?');">Excluir</a>
+                  <a href="crud_manutencao.php?acao=editar&id=<?= urlencode($row['trem']); ?>" class="btn btn-sm btn-primary btn-acao">Alterar</a>
+                  <a href="crud_manutencao.php?acao=excluir&id=<?= urlencode($row['trem']); ?>" class="btn btn-sm btn-danger btn-acao" onclick="return confirm('Deseja realmente excluir este registro?');">Excluir</a>
                 </td>
               </tr>
             <?php endwhile; ?>
@@ -137,10 +117,42 @@ $result_inspecoes = $conn->query($sql_inspecoes);
       </table>
     </div>
 
-    <!-- INSPEÇÕES -->
+    <!-- 🧰 FORMULÁRIO: ADICIONAR MANUTENÇÃO -->
+    <div class="caixa">
+      <div class="titulo-secao">ADICIONAR MANUTENÇÃO</div>
+      <form action="crud_manutencao.php" method="POST" class="mt-3">
+        <input type="hidden" name="acao" value="inserir">
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label class="form-label">Trem (número)*</label>
+            <input type="number" name="trem" class="form-control" required>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Descrição*</label>
+            <input type="text" name="descricao" class="form-control" required>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Cód. Funcionário*</label>
+            <input type="text" name="cod_funcionario" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Status*</label>
+          <select name="statusTrensManut" class="form-select" required>
+            <option value="Pendente">Pendente</option>
+            <option value="Realizada">Realizada</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-salvar">Salvar</button>
+        <button type="reset" class="btn btn-secondary">Cancelar</button>
+      </form>
+    </div>
+
+    <!-- 📅 INSPEÇÕES -->
     <div class="caixa">
       <div class="titulo-secao">CALENDÁRIO DE INSPEÇÕES</div>
-
       <table class="table table-striped table-sm">
         <thead class="table-dark">
           <tr>
@@ -156,10 +168,10 @@ $result_inspecoes = $conn->query($sql_inspecoes);
           <?php if ($result_inspecoes && $result_inspecoes->num_rows > 0): ?>
             <?php while ($row = $result_inspecoes->fetch_assoc()): ?>
               <tr>
-                <td><?php echo htmlspecialchars($row['mes']); ?></td>
-                <td><?php echo htmlspecialchars($row['data']); ?></td>
-                <td><?php echo htmlspecialchars($row['descricao']); ?></td>
-                <td><?php echo htmlspecialchars($row['cod_funcionario']); ?></td>
+                <td><?= htmlspecialchars($row['mes']); ?></td>
+                <td><?= htmlspecialchars($row['data']); ?></td>
+                <td><?= htmlspecialchars($row['descricao']); ?></td>
+                <td><?= htmlspecialchars($row['cod_funcionario']); ?></td>
                 <td>
                   <?php if ($row['status'] === 'Pendente'): ?>
                     <span class="status-pendente">Pendente</span>
@@ -168,9 +180,8 @@ $result_inspecoes = $conn->query($sql_inspecoes);
                   <?php endif; ?>
                 </td>
                 <td>
-                  <a href="crud_inspecao.php?acao=editar&id=<?php echo urlencode($row['idInspecao']); ?>" class="btn btn-sm btn-primary btn-acao">Alterar</a>
-                  <a href="crud_inspecao.php?acao=excluir&id=<?php echo urlencode($row['idInspecao']); ?>" class="btn btn-sm btn-danger btn-acao"
-                     onclick="return confirm('Deseja realmente excluir esta inspeção?');">Excluir</a>
+                  <a href="crud_inspecao.php?acao=editar&id=<?= urlencode($row['idInspecao']); ?>" class="btn btn-sm btn-primary btn-acao">Alterar</a>
+                  <a href="crud_inspecao.php?acao=excluir&id=<?= urlencode($row['idInspecao']); ?>" class="btn btn-sm btn-danger btn-acao" onclick="return confirm('Deseja realmente excluir esta inspeção?');">Excluir</a>
                 </td>
               </tr>
             <?php endwhile; ?>
@@ -181,11 +192,10 @@ $result_inspecoes = $conn->query($sql_inspecoes);
       </table>
     </div>
 
-    <!-- FORMULÁRIO: ADICIONAR INSPEÇÃO -->
+    <!-- 📝 FORMULÁRIO: ADICIONAR INSPEÇÃO -->
     <div class="caixa">
       <div class="titulo-secao">ADICIONAR NOVA INSPEÇÃO</div>
-
-      <form id="formInspecao" class="mt-3">
+      <form action="crud_inspecao.php" method="POST" class="mt-3">
         <input type="hidden" name="acao" value="inserir">
         <div class="row mb-3">
           <div class="col-md-4">
@@ -220,72 +230,9 @@ $result_inspecoes = $conn->query($sql_inspecoes);
       </form>
     </div>
 
-    <!-- FORMULÁRIO: ADICIONAR MANUTENÇÃO -->
-    <div class="caixa">
-      <div class="titulo-secao">ADICIONAR MANUTENÇÃO</div>
-
-      <form id="formManutencao" class="mt-3">
-        <input type="hidden" name="acao" value="inserir">
-        <div class="row mb-3">
-          <div class="col-md-4">
-            <label class="form-label">Trem (número)*</label>
-            <input type="number" name="trem" class="form-control" required>
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Descrição*</label>
-            <input type="text" name="descricao" class="form-control" required>
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Cód. Funcionário*</label>
-            <input type="text" name="cod_funcionario" class="form-control" required>
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Status*</label>
-          <select name="statusTrensManut" class="form-select" required>
-            <option value="Pendente">Pendente</option>
-            <option value="Realizada">Realizada</option>
-          </select>
-        </div>
-
-        <button type="submit" class="btn btn-primary btn-salvar">Salvar</button>
-        <button type="reset" class="btn btn-secondary">Cancelar</button>
-      </form>
-    </div>
-
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-  // ---- AJAX para INSPEÇÕES ----
-  document.getElementById("formInspecao").addEventListener("submit", async function (e) {
-    e.preventDefault();
-    const form = e.target;
-    const formData = new FormData(form);
-    const response = await fetch("crud_inspecao.php", {
-      method: "POST",
-      body: formData
-    });
-    const data = await response.json();
-    alert(data.mensagem);
-    if (data.success) location.reload();
-  });
-
-  // ---- AJAX para MANUTENÇÃO ----
-  document.getElementById("formManutencao").addEventListener("submit", async function (e) {
-    e.preventDefault();
-    const form = e.target;
-    const formData = new FormData(form);
-    const response = await fetch("crud_manutencao.php", {
-      method: "POST",
-      body: formData
-    });
-    const data = await response.json();
-    alert(data.mensagem);
-    if (data.success) location.reload();
-  });
-  </script>
 </body>
 </html>
 
