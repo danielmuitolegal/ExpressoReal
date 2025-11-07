@@ -185,7 +185,7 @@ $result_inspecoes = $conn->query($sql_inspecoes);
     <div class="caixa">
       <div class="titulo-secao">ADICIONAR NOVA INSPEÇÃO</div>
 
-      <form action="crud_inspecao.php" method="POST" class="mt-3">
+      <form id="formInspecao" class="mt-3">
         <input type="hidden" name="acao" value="inserir">
         <div class="row mb-3">
           <div class="col-md-4">
@@ -224,7 +224,7 @@ $result_inspecoes = $conn->query($sql_inspecoes);
     <div class="caixa">
       <div class="titulo-secao">ADICIONAR MANUTENÇÃO</div>
 
-      <form action="crud_manutencao.php" method="POST" class="mt-3">
+      <form id="formManutencao" class="mt-3">
         <input type="hidden" name="acao" value="inserir">
         <div class="row mb-3">
           <div class="col-md-4">
@@ -257,10 +257,38 @@ $result_inspecoes = $conn->query($sql_inspecoes);
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+  // ---- AJAX para INSPEÇÕES ----
+  document.getElementById("formInspecao").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    const response = await fetch("crud_inspecao.php", {
+      method: "POST",
+      body: formData
+    });
+    const data = await response.json();
+    alert(data.mensagem);
+    if (data.success) location.reload();
+  });
+
+  // ---- AJAX para MANUTENÇÃO ----
+  document.getElementById("formManutencao").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    const response = await fetch("crud_manutencao.php", {
+      method: "POST",
+      body: formData
+    });
+    const data = await response.json();
+    alert(data.mensagem);
+    if (data.success) location.reload();
+  });
+  </script>
 </body>
 </html>
 
 <?php
-// fecha conexão
 $conn->close();
 ?>
