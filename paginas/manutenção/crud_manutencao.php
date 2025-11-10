@@ -1,121 +1,133 @@
 <?php
-// Endpoint para criar / editar / excluir trens em manutenção via AJAX
+include_once('../../bdd/database.php');
 header('Content-Type: application/json; charset=utf-8');
 
-include_once('../../bdd/database.php');
-
-
-if ($conn->connect_error) {
-    echo json_encode(['success' => false, 'mensagem' => 'Falha na conexão com o banco.']);
+function json_exit($arr) {
+    echo json_encode($arr, JSON_UNESCAPED_UNICODE);
     exit;
 }
 
-// Detecta ação: create / edit / delete (padrão create)
-$action = isset($_POST['action']) ? $_POST['action'] : 'create';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $acao = $_POST['acao'] ?? '';
 
-if ($action === 'create') {
-    $trem = isset($_POST['trem']) ? intval($_POST['trem']) : 0;
-    $descricao = isset($_POST['descricao']) ? trim($_POST['descricao']) : '';
-    $cod = isset($_POST['cod_funcionario']) ? trim($_POST['cod_funcionario']) : '';
-    $status = isset($_POST['statusTrensManut']) ? trim($_POST['statusTrensManut']) : '';
+    // INSERIR ou ATUALIZAR
+    if ($acao === 'inserir' || $acao === 'atualizar') {
+        if (!empty($_POST['trem']) && !empty($_POST['descricao']) && !empty($_POST['cod_funcionario']) && !empty($_POST['statusTrensManut'])) {
+            $trem = intval($_POST['trem']);
+            $descricao = trim($_POST['descricao']);
+            $cod_funcionario = trim($_POST['cod_funcionario']);
+            $status = trim($_POST['statusTrensManut']);
 
-    if (!$trem || !$descricao || !$cod || !$status) {
-        echo json_encode(['success' => false, 'mensagem' => 'Preencha todos os campos obrigatórios.']);
-        exit;
+            if ($acao === 'inserir') {
+                $sql = "INSERT INTO trens_manutencao (trem, descricao, cod_funcionario, statusTrensManut)
+                        VALUES (?, ?, ?, ?)";
+            } else {
+                $sql = "UPDATE trens_manutencao SET descricao=?, cod_funcionario=?, statusTrensManut=? WHERE trem=?";
+            }
+
+            $stmt = $conn->prepare($sql);
+            if (!$stmt) json_exit(['success' => false, 'mensagem' => 'Erro na preparação da query: ' . $conn->error]);
+
+            if ($acao === 'inserir') {
+                $stmt->bind_param("isss", $trem, $descricao, $cod_funcionario, $status);
+            } else {
+                $stmt->bind_param("sssi", $descricao, $cod_funcionario, $status, $trem);
+            }
+
+            if ($stmt->execute()) {
+                $stmt->close();
+                json_exit([
+                    'success' => true,
+                    'mensagem' => $acao === 'inserir' ? 'Manutenção adicionada com sucesso!' : 'Manutenção atualizada com sucesso!'
+                ]);
+            } else {
+                $stmt->close();
+                json_exit(['success' => false, 'mensagem' => 'Erro ao salvar: ' . $conn->error]);
+            }
+        } else {
+            json_exit(['success' => false, 'mensagem' => 'Preencha todos os campos obrigatórios.']);
+        }
     }
 
-    $sql = "INSERT INTO trens_manutencao (trem, descricao, cod_funcionario, statusTrensManut) VALUES (?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    if (!$stmt) {
-        echo json_encode(['success' => false, 'mensagem' => 'Erro na preparação da query: ' . $conn->error]);
-        exit;
+    // EXCLUIR
+    if ($acao === 'excluir') {
+        $trem = intval($_POST['trem'] ?? 0);
+        if ($trem <= 0) json_exit(['success' => false, 'mensagem' => 'Trem inválido para exclusão.']);
+
+        $sql = "DELETE FROM trens_manutencao WHERE trem=?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $trem);
+
+        if ($stmt->execute()) {
+            $stmt->close();
+            json_exit(['success' => true, 'mensagem' => 'Trem removido com sucesso!']);
+        } else {
+            $stmt->close();
+            json_exit(['success' => false, 'mensagem' => 'Erro ao excluir: ' . $conn->error]);
+        }
     }
-    $stmt->bind_param("isss", $trem, $descricao, $cod, $status);
-    if ($stmt->execute()) {
-        echo json_encode([
-            'success' => true,
-            'mensagem' => 'Manutenção adicionada com sucesso!',
-            'row' => [
-                'trem' => $trem,
-                'descricao' => $descricao,
-                'cod_funcionario' => $cod,
-                'statusTrensManut' => $status
-            ]
-        ]);
-    } else {
-        // possivelmente chave primária duplicada
-        echo json_encode(['success' => false, 'mensagem' => 'Erro ao inserir: ' . $stmt->error]);
-    }
-    $stmt->close();
-    $conn->close();
-    exit;
 }
 
-if ($action === 'delete') {
-    $trem = isset($_POST['trem']) ? intval($_POST['trem']) : 0;
-    if (!$trem) {
-        echo json_encode(['success' => false, 'mensagem' => 'Trem inválido.']);
-        exit;
-    }
-    $sql = "DELETE FROM trens_manutencao WHERE trem = ?";
+// GET: CARREGAR PARA EDIÇÃO
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['acao']) && $_GET['acao'] === 'editar' && isset($_GET['id'])) {
+    $trem = intval($_GET['id']);
+    $sql = "SELECT * FROM trens_manutencao WHERE trem=?";
     $stmt = $conn->prepare($sql);
-    if (!$stmt) {
-        echo json_encode(['success' => false, 'mensagem' => 'Erro na preparação da query: ' . $conn->error]);
-        exit;
-    }
     $stmt->bind_param("i", $trem);
-    if ($stmt->execute()) {
-        echo json_encode(['success' => true, 'mensagem' => 'Registro de manutenção excluído com sucesso!']);
-    } else {
-        echo json_encode(['success' => false, 'mensagem' => 'Erro ao excluir: ' . $stmt->error]);
-    }
+    $stmt->execute();
+    $result = $stmt->get_result()->fetch_assoc();
     $stmt->close();
-    $conn->close();
-    exit;
-}
 
-if ($action === 'edit') {
-    // trem_old é o identificador atual (antes da edição) — primary key atual
-    $trem_old = isset($_POST['trem_old']) ? intval($_POST['trem_old']) : 0;
-    $trem = isset($_POST['trem']) ? intval($_POST['trem']) : 0;
-    $descricao = isset($_POST['descricao']) ? trim($_POST['descricao']) : '';
-    $cod = isset($_POST['cod_funcionario']) ? trim($_POST['cod_funcionario']) : '';
-    $status = isset($_POST['statusTrensManut']) ? trim($_POST['statusTrensManut']) : '';
-
-    if (!$trem_old || !$trem || !$descricao || !$cod || !$status) {
-        echo json_encode(['success' => false, 'mensagem' => 'Preencha todos os campos obrigatórios.']);
+    if ($result) {
+        // Gera formulário HTML preenchido
+        ?>
+        <!DOCTYPE html>
+        <html lang="pt-BR">
+        <head>
+            <meta charset="UTF-8">
+            <title>Editar Manutenção</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+        </head>
+        <body class="bg-light">
+            <div class="container mt-5">
+                <div class="card p-4 shadow-sm">
+                    <h3 class="mb-3">Editar Manutenção</h3>
+                    <form action="crud_manutencao.php" method="POST">
+                        <input type="hidden" name="acao" value="atualizar">
+                        <div class="mb-3">
+                            <label class="form-label">Trem</label>
+                            <input type="number" name="trem" class="form-control" readonly value="<?php echo htmlspecialchars($result['trem']); ?>">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descrição</label>
+                            <input type="text" name="descricao" class="form-control" value="<?php echo htmlspecialchars($result['descricao']); ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Código do Funcionário</label>
+                            <input type="text" name="cod_funcionario" class="form-control" value="<?php echo htmlspecialchars($result['cod_funcionario']); ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select name="statusTrensManut" class="form-select" required>
+                                <option value="Pendente" <?php echo $result['statusTrensManut'] === 'Pendente' ? 'selected' : ''; ?>>Pendente</option>
+                                <option value="Realizada" <?php echo $result['statusTrensManut'] === 'Realizada' ? 'selected' : ''; ?>>Realizada</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                        <a href="manutencao.php" class="btn btn-secondary">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </body>
+        </html>
+        <?php
+        exit;
+    } else {
+        echo "<p>Registro não encontrado.</p>";
         exit;
     }
-
-    // Atualiza registro. Permitimos alterar o número do trem (PK) — cuidado com duplicidade.
-    $sql = "UPDATE trens_manutencao SET trem = ?, descricao = ?, cod_funcionario = ?, statusTrensManut = ? WHERE trem = ?";
-    $stmt = $conn->prepare($sql);
-    if (!$stmt) {
-        echo json_encode(['success' => false, 'mensagem' => 'Erro na preparação da query: ' . $conn->error]);
-        exit;
-    }
-    $stmt->bind_param("isssi", $trem, $descricao, $cod, $status, $trem_old);
-    if ($stmt->execute()) {
-        echo json_encode([
-            'success' => true,
-            'mensagem' => 'Manutenção atualizada com sucesso!',
-            'old_trem' => $trem_old,
-            'row' => [
-                'trem' => $trem,
-                'descricao' => $descricao,
-                'cod_funcionario' => $cod,
-                'statusTrensManut' => $status
-            ]
-        ]);
-    } else {
-        echo json_encode(['success' => false, 'mensagem' => 'Erro ao atualizar: ' . $stmt->error]);
-    }
-    $stmt->close();
-    $conn->close();
-    exit;
 }
 
-// Ação inválida
-echo json_encode(['success' => false, 'mensagem' => 'Ação inválida.']);
-$conn->close();
-exit;
+// Se cair aqui, método inválido
+json_exit(['success' => false, 'mensagem' => 'Método inválido.']);
+?>
