@@ -6,8 +6,8 @@ include '../chat/chat.php';
 include '../../bdd/database.php';
 
 if (!isset($_SESSION['usuario_nome'])) {
-    header("Location: ../login/login.php");
-    exit();
+  header("Location: ../login/login.php");
+  exit();
 }
 
 $nome = $_SESSION['usuario_nome'];
@@ -142,6 +142,8 @@ if ($result2) {
           <li class="nav-item mx-2"><a class="nav-link active" href="../dashboard/dashboard.php">Home</a></li>
           <li class="nav-item mx-2"><a class="nav-link active" href="../itinerários/itinerários.php">Trens/Rotas</a></li>
           <li class="nav-item mx-2"><a class="nav-link active" href="../manutenção/manutencao.php">Manutenção</a></li>
+          <li class="nav-item mx-2"><a class="nav-link active" href="../login/perfil.php">Perfil</a></li>
+
         </ul>
 
         <form class="d-flex ms-3 me-3 my-2" role="search">
@@ -199,8 +201,8 @@ if ($result2) {
         <div class="card card-custom">
           <div class="section-title">ATUALMENTE A EXPRESSO REAL TEM:</div>
           <div class="card-body" id="stats-container">
-            <p class="mb-2">Cidades atendidas: <?php echo "$row1[total1]";?><span id="cities-count"></span></p>
-            <p class="mb-2">Linhas ferroviárias: <?php echo "$row2[total2]";?><span id="routes-count"></span></p>
+            <p class="mb-2">Cidades atendidas: <?php echo "$row1[total1]"; ?><span id="cities-count"></span></p>
+            <p class="mb-2">Linhas ferroviárias: <?php echo "$row2[total2]"; ?><span id="routes-count"></span></p>
             <p class="mb-0">Trens físicos: <span id="trains-count"></span></p>
           </div>
         </div>
@@ -210,7 +212,7 @@ if ($result2) {
           <div class="section-title">ROTAS</div>
           <div class="card-body" id="routes-container">
             <?php
-              echo $mostrarRota;
+            echo $mostrarRota;
             ?>
           </div>
         </div>
